@@ -2,19 +2,24 @@ package com.ariadne.auditlog
 
 import com.ariadne.domain.AuditLogEvent
 import com.ariadne.domain.Person
-import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
 import org.hibernate.SessionFactory
 import org.junit.Before
 import org.junit.Test
 
 class AuditLogIntegrationTests extends GroovyTestCase {
 
-    GrailsApplication grailsApplication
+    AuditLogListener auditLogListener
 
     @Before
     void setUp() {
-        grailsApplication.config. auditLog.verbose = true
-        grailsApplication.config. auditLog.defaultInclude = ['name']
+        auditLogListener.verbose = true
+
+        auditLogListener.defaultIncludeList = ['name']
+        auditLogListener.defaultIgnoreList = []
+
+        auditLogListener.actorClosure = { GrailsWebRequest request, GrailsHttpSession session -> "system" }
     }
 
     @Test
@@ -65,6 +70,5 @@ class AuditLogIntegrationTests extends GroovyTestCase {
         assert auditLog.lastUpdated != null
 
         assert auditLog.actor == "system"
-
     }
 }

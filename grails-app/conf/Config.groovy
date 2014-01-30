@@ -1,3 +1,6 @@
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
+
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
@@ -18,7 +21,7 @@ auditLog.verbose  = true         // log each property change separately (otherwi
 auditLog.sessionAttribute = ""   // the session attribute under which the actor name is found
 auditLog.actorKey = ""           // the request attribute key under which the actor name is found
 
-auditLog.actorClosure = { request, session ->
+auditLog.actorClosure = {  GrailsWebRequest request, GrailsHttpSession session ->
     if (request.applicationContext.springSecurityService.principal instanceof String){
         return request.applicationContext.springSecurityService.principal
     }
