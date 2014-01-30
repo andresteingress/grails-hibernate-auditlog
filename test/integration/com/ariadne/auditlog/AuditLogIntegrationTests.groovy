@@ -56,7 +56,7 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
         sessionFactory.currentSession.flush()
 
-        assert 2 == AuditLogEvent.count() // we have one INSERT and a one UPDATE event
+        assert ['INSERT', 'UPDATE'] == AuditLogEvent.list(order: 'asc', sort: 'id')*.eventName
 
         def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassNameAndEventName(p.id as String, Person.class.simpleName, "UPDATE")
         assert auditLog
