@@ -238,7 +238,7 @@ class AuditLogListener extends AbstractPersistenceEventListener {
         try {
             def entity = getDomainClass(domain)
 
-            def map = makeMap(entity.persistentProperties*.name as Set, domain)
+            def map = makeMap(filterProperties(entity.persistentProperties*.name as Set, domain), domain)
             if (!callHandlersOnly(domain)) {
                 logChanges(domain, null, map, getEntityId(domain), getEventName(event), entity.name)
             }
@@ -262,7 +262,7 @@ class AuditLogListener extends AbstractPersistenceEventListener {
         try {
             def entity = getDomainClass(domain)
 
-            def map = makeMap(entity.persistentProperties*.name as Set, domain)
+            def map = makeMap(filterProperties(entity.persistentProperties*.name as Set, domain), domain)
             if (!callHandlersOnly(domain)) {
                 logChanges(domain, map, null, getEntityId(domain), getEventName(event), entity.name)
             }
@@ -299,6 +299,8 @@ class AuditLogListener extends AbstractPersistenceEventListener {
             // Get all the dirty properties
             Set<String> dirtyProperties = getDirtyPropertyNames(domain, entity)
 
+            dirtyProperties = filterProperties(dirtyProperties, domain)
+
             if (dirtyProperties) {
                 // Get the prior values for everything that is dirty
                 Map oldMap = dirtyProperties.collectEntries { String property ->
@@ -307,10 +309,6 @@ class AuditLogListener extends AbstractPersistenceEventListener {
 
                 // Get the current values for everything that is dirty
                 Map newMap = makeMap(dirtyProperties, domain)
-
-                if (!significantChange(domain, oldMap, newMap)) {
-                    return
-                }
 
                 // Allow user to override whether you do auditing for them
                 if (!callHandlersOnly(domain)) {
@@ -323,6 +321,14 @@ class AuditLogListener extends AbstractPersistenceEventListener {
         catch (e) {
             log.error "Audit plugin unable to process update event for ${domain.class.name}", e
         }
+    }
+
+    Set<String> filterProperties(Set<String> properties, domain) {
+        // remove all ignored properties
+        properties.removeAll(ignoreList(domain))
+
+        // intersect with included properties
+        properties.intersect(includeList(domain))
     }
 
     /**
@@ -359,46 +365,6 @@ class AuditLogListener extends AbstractPersistenceEventListener {
         }
 
         dirtyProperties
-    }
-
-    /**
-     * Prevent infinite loops of change logging by trapping
-     * non-significant changes. Occasionally you can set up
-     * a change handler that will create a "trivial" object
-     * change that you don't want to trigger another change
-     * event. So this feature uses the ignore parameter
-     * to provide a list of fields for onChange to ignore.
-     */
-    protected boolean significantChange(domain, Map oldMap, Map newMap) {
-        // remove properties that need to be ignored
-        def ignore = ignoreList(domain)
-        ignore?.each { String key ->
-            oldMap.remove(key)
-            newMap.remove(key)
-        }
-
-        // if includes are given, create new/old maps with only these keys
-        def include = includeList(domain)
-        if (include)  {
-            def copyOldMap = [:]
-            def copyNewMap = [:]
-
-            include.each { String key ->
-                copyNewMap[key] = newMap[key]
-                copyOldMap[key] = oldMap[key]
-            }
-
-            newMap = copyNewMap
-            oldMap = copyOldMap
-        }
-
-        boolean changed = false
-        oldMap.each { String k, Object v ->
-            if (v != newMap[k]) {
-                changed = true
-            }
-        }
-        return changed
     }
 
     private makeMap(Set<String> propertyNames, domain) {

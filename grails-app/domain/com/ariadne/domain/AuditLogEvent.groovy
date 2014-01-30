@@ -19,7 +19,6 @@ class AuditLogEvent implements Serializable {
     String uri
     String className
     String persistedObjectId
-    Long persistedObjectVersion = 0
 
     String eventName
     String propertyName

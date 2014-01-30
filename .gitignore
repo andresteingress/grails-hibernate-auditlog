@@ -42,3 +42,7 @@
 # other
 *.iws
 /.idea
+
+/AuditLogExample.iml
+
+/AuditLogExample-grailsPlugins.iml
