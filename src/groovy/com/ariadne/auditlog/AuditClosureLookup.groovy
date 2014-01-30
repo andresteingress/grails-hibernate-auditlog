@@ -3,7 +3,7 @@ package com.ariadne.auditlog
 import org.grails.datastore.mapping.reflect.ClassPropertyFetcher
 
 /**
- * Handles looking up values from the static auditable closure or Boolean value.
+ * Handles looking up values from the static audible closure or Boolean value.
  */
 class AuditClosureLookup {
 

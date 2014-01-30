@@ -111,23 +111,6 @@ class AuditLogListener extends AbstractPersistenceEventListener {
     }
 
     /**
-     * We allow users to specify static auditable = [handlersOnly: true]
-     * if they don't want us to log events for them and instead have their own plan.
-     */
-    boolean callHandlersOnly(domain) {
-        // Allow global configuration of handlers only
-        if (grailsApplication.config.auditLog.handlersOnly) {
-            return true
-        }
-
-        Map auditableMap = getAuditableMap(domain)
-        if (auditableMap?.containsKey('handlersOnly')) {
-            return (auditableMap['handlersOnly']) ? true : false
-        }
-        return false
-    }
-
-    /**
      * The default properties to mask list is:  ['password']
      * if you want to provide your own mask list, specify in the DomainClass:
      *
@@ -168,9 +151,7 @@ class AuditLogListener extends AbstractPersistenceEventListener {
             def entity = getDomainClass(domain)
 
             def map = makeMap(filterProperties(entity.persistentProperties*.name as Set, domain), domain)
-            if (!callHandlersOnly(domain)) {
-                logChanges(domain, null, map, getEntityId(domain), getEventName(event), entity.name)
-            }
+            logChanges(domain, null, map, getEntityId(domain), getEventName(event), entity.name)
 
             executeHandler(domain, 'onDelete', map, null)
         }
@@ -192,9 +173,7 @@ class AuditLogListener extends AbstractPersistenceEventListener {
             def entity = getDomainClass(domain)
 
             def map = makeMap(filterProperties(entity.persistentProperties*.name as Set, domain), domain)
-            if (!callHandlersOnly(domain)) {
-                logChanges(domain, map, null, getEntityId(domain), getEventName(event), entity.name)
-            }
+            logChanges(domain, map, null, getEntityId(domain), getEventName(event), entity.name)
 
             executeHandler(domain, 'onSave', null, map)
         }
@@ -240,9 +219,7 @@ class AuditLogListener extends AbstractPersistenceEventListener {
                 Map newMap = makeMap(dirtyProperties, domain)
 
                 // Allow user to override whether you do auditing for them
-                if (!callHandlersOnly(domain)) {
-                    logChanges(domain, newMap, oldMap, getEntityId(domain), getEventName(event), entity.name)
-                }
+                logChanges(domain, newMap, oldMap, getEntityId(domain), getEventName(event), entity.name)
 
                 executeHandler(domain, 'onChange', oldMap, newMap)
             }
