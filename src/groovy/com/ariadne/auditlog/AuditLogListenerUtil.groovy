@@ -1,10 +1,7 @@
 package com.ariadne.auditlog
 
-import grails.util.Holders
-import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler
-import org.codehaus.groovy.grails.commons.GrailsDomainClass
+import groovy.util.logging.Commons
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
-import org.grails.datastore.mapping.reflect.ClassPropertyFetcher
 
 import javax.servlet.http.HttpSession
 
@@ -15,105 +12,10 @@ import javax.servlet.http.HttpSession
  *
  * @author Shawn Hartsock
  */
+@Commons
 class AuditLogListenerUtil {
 
-    /**
-     * Returns true for auditable entities, false otherwise.
-     *
-     * Domain classes can use the 'isAuditable' attribute to provide a closure
-     * that will be called in order to determine instance level auditability. For example,
-     * a domain class may only be audited after it becomes Final and not while Pending.
-     */
-    static boolean isAuditableEntity(domain, String eventName) {
-        // Null or false is not auditable
-        def auditable = getAuditable(domain)
-        if (!auditable) {
-            return false
-        }
-
-        // If we have a map, see if we have an instance-level closure to check
-        if (auditable instanceof Map) {
-            def map = auditable as Map
-            if (map?.containsKey('isAuditable')) {
-                return map.isAuditable.call(eventName, domain)
-            }
-        }
-
-        // Anything that get's this far is auditable
-        return true
-    }
-
-    /**
-     * The static auditable attribute for the given domain class or null if none exists
-     */
-    static getAuditable(domain) {
-        def cpf = ClassPropertyFetcher.forClass(domain.class)
-        cpf.getPropertyValue('auditable')
-    }
-
-    /**
-     * If auditable is defined as a Map, return it otherwise return null
-     */
-    static Map getAuditableMap(domain) {
-        def auditable = getAuditable(domain)
-        auditable && auditable instanceof Map ? auditable as Map : null
-    }
-
-    /**
-     * Get the Id to display for this entity when logging. Domain classes can override the property
-     * used by supplying a [entityId] attribute in the auditable Map.
-     *
-     * @param event
-     * @return String key
-     */
-    static String getEntityId(domain) {
-        // If we have a display key, allow override of what shows as the entity id
-        Map auditableMap = getAuditableMap(domain)
-        if (auditableMap?.containsKey('entityId')) {
-            def entityId = auditableMap.entityId
-
-            if (entityId instanceof Closure) {
-                return entityId.call(domain) as String
-            }
-            else if (entityId instanceof Collection) {
-                return entityId.collect { getIdProperty(domain, it) }.join("|")
-            }
-            else if (entityId instanceof String) {
-                return getIdProperty(domain, entityId)
-            }
-        }
-
-        // Use the identifier property if this is a domain class or just 'id' if not
-        def identifier = getDomainClass(domain)?.identifier?.name ?: 'id'
-        domain."${identifier}" as String
-    }
-
-    private static String getIdProperty(domain, property) {
-        def val = domain."${property}"
-        if (val instanceof Enum) {
-            return val.name()
-        }
-        if (getDomainClass(val)) {
-            return getEntityId(val)
-        }
-        val as String
-    }
-
-    /**
-     * Return the grails domain class for the given domain object.
-     *
-     * @param domain the domain instance
-     */
-    static GrailsDomainClass getDomainClass(domain) {
-        if (domain && Holders.grailsApplication.isDomainClass(domain.class)) {
-            Holders.grailsApplication.getArtefact(DomainClassArtefactHandler.TYPE, domain.class.name) as GrailsDomainClass
-        }
-        else {
-            null
-        }
-    }
-
-    /**
+   /**
      * The original getActor method transplanted to the utility class as
      * a closure. The closure takes two arguments one a RequestAttributes object
      * the other is an HttpSession object.

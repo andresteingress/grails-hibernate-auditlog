@@ -16,7 +16,6 @@ import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
 
 // All audit log configuration variables
 auditLog.disabled = false        // globally disable audit logging
-auditLog.verbose  = true         // log each property change separately (otherwise only the object ID   will be logged)
 
 auditLog.sessionAttribute = ""   // the session attribute under which the actor name is found
 auditLog.actorKey = ""           // the request attribute key under which the actor name is found
@@ -34,14 +33,8 @@ auditLog.actorClosure = {  GrailsWebRequest request, GrailsHttpSession session -
 
 auditLog.defaultInclude = []     // can specify a list of included properties - all others are automatically excluded
 auditLog.defaultIgnore = []      // can specify a list of properties that are ignored by the audit log
-auditLog.defaultMask = []        // can specify a list of properties e.g. ['password'] to mask with a property mask value
-auditLog.propertyMask = "***"    // the mask string that is used for the properties in defaultMask
-auditLog.replacementPatterns = [:] // can provide a map of key/value pairs where key is replaced by value
-
-auditLog.logIds = false
 
 // audit log persistence settings
-auditLog.transactional = false   // save every audit log in a separate transaction
 auditLog.cacheDisabled = true // Hibernate Cache for the audit log domain object
 auditLog.tablename = null // custom AuditLog table name
 auditLog.truncateLength = null   // can provide a maximum length for values in the audit log

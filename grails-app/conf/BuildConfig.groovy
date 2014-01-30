@@ -36,6 +36,7 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.22'
+        compile 'com.netflix.rxjava:rxjava-groovy:0.16.1'
     }
 
     plugins {

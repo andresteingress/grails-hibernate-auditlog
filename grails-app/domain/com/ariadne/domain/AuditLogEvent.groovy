@@ -8,9 +8,7 @@ import grails.util.Holders
  */
 class AuditLogEvent implements Serializable {
 
-    static Long MAX_SIZE = 65534
-
-    static auditable = false
+    static MAX_SIZE = 65534
 
     Date dateCreated
     Date lastUpdated
@@ -33,8 +31,8 @@ class AuditLogEvent implements Serializable {
         eventName(nullable: true)
         propertyName(nullable: true)
 
-        oldValue(nullable: true, maxSize: 65534)
-        newValue(nullable: true, maxSize: 65534)
+        oldValue(nullable: true, maxSize: MAX_SIZE)
+        newValue(nullable: true, maxSize: MAX_SIZE)
     }
 
     static mapping = {

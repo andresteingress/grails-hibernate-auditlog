@@ -3,14 +3,24 @@ package com.ariadne.auditlog
 import org.grails.datastore.mapping.reflect.ClassPropertyFetcher
 
 /**
- * Handles looking up values from the static audible closure or Boolean value.
+ * Looks up values from the static audible closure or Boolean value.
  */
-class AuditClosureLookup {
+class ClosureReader {
 
     static final String PROPERTY_NAME = "auditable"
 
     static final String INCLUDE = "include"
     static final String IGNORE  = "ignore"
+
+    static boolean isAuditable(Class<?> cls)  {
+        if (cls == null) return false
+
+        def clazz = ClassPropertyFetcher.forClass(cls)
+        if (!clazz) return false
+
+        def value = clazz.getPropertyValue(PROPERTY_NAME)
+        return value == true || value instanceof Map
+    }
 
     static List<String> ignoreList(Class<?> cls, List<String> defaultValues = []) {
         return lookupAuditableMapValue(cls, IGNORE, defaultValues)

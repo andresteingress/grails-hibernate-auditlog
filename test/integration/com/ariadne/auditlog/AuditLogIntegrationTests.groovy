@@ -14,8 +14,6 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
     @Before
     void setUp() {
-        auditLogListener.verbose = true
-
         auditLogListener.defaultIncludeList = ['name']
         auditLogListener.defaultIgnoreList = []
 
@@ -24,7 +22,7 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
     @Test
     void testInsertEvent() {
-        def p = new Person(name: "Andre", surName: "Steingress").save()
+        def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
 
         def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassName(p.id as String, Person.class.simpleName)
         assert auditLog
@@ -46,15 +44,11 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
     @Test
     void testUpdateEvent() {
-        def p = new Person(name: "Andre", surName: "Steingress").save()
-
-        sessionFactory.currentSession.flush()
+        def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
 
         p.name = 'Maxi'
         p.surName = 'Mustermann'
-        p.save()
-
-        sessionFactory.currentSession.flush()
+        p.save(flush: true)
 
         assert ['INSERT', 'UPDATE'] == AuditLogEvent.list(order: 'asc', sort: 'id')*.eventName
 
