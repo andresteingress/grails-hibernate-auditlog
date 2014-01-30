@@ -1,20 +1,14 @@
 package com.ariadne.auditlog
 
 import com.ariadne.domain.AuditLogEvent
+import groovy.util.logging.Commons
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import org.grails.datastore.mapping.core.Datastore
-import org.grails.datastore.mapping.engine.event.AbstractPersistenceEvent
-import org.grails.datastore.mapping.engine.event.AbstractPersistenceEventListener
-import org.grails.datastore.mapping.engine.event.EventType
-import org.grails.datastore.mapping.engine.event.PostInsertEvent
-import org.grails.datastore.mapping.engine.event.PreDeleteEvent
-import org.grails.datastore.mapping.engine.event.PreUpdateEvent
+import org.grails.datastore.mapping.engine.event.*
 import org.springframework.context.ApplicationEvent
 import org.springframework.web.context.request.RequestContextHolder
 
-import groovy.util.logging.Commons
-
-import static AuditLogListenerUtil.*
+import static com.ariadne.auditlog.AuditLogListenerUtil.*
 
 /**
  * Grails interceptor for logging saves, updates, deletes and acting on
@@ -131,71 +125,6 @@ class AuditLogListener extends AbstractPersistenceEventListener {
             return (auditableMap['handlersOnly']) ? true : false
         }
         return false
-    }
-
-    /**
-     * The default include field list is: [] if you want
-     * to provide your own include list do so by specifying the include list like so:
-     *
-     *   static auditable = [include:['id','name']]
-     *
-     * You may change the default include list by setting:
-     *
-     *   auditLog.defaultInclude = ['id', 'name]
-     *
-     * Or globally:
-     *
-     *   auditLog.defaultInclude = []
-     *
-     */
-    List<String> includeList(domain) {
-        def include = defaultIncludeList
-
-        Map auditableMap = getAuditableMap(domain)
-        if (auditableMap?.containsKey('include')) {
-            log.debug "Found an include list on this entity ${domain.class.name}"
-            def list = auditableMap['include']
-            if (list instanceof List) {
-                include = list
-            }
-        }
-
-        return include
-    }
-
-    /**
-     * The default ignore field list is: [] if you want
-     * to provide your own ignore list do so by specifying the ignore list like so:
-     *
-     *   static auditable = [ignore:['version','lastUpdated','myField']]
-     *
-     * You may change the default ignore list by setting:
-     *
-     *   auditLog.defaultIgnore = ['version', 'lastUpdated', 'myOtherField']
-     *
-     * If instead you really want to trigger on version and lastUpdated changes you
-     * may specify an empty ignore list:
-     *
-     *   static auditable = [ignore:[]]
-     *
-     * Or globally:
-     *
-     *   auditLog.defaultIgnore = []
-     *
-     */
-    List<String> ignoreList(domain) {
-        def ignore = defaultIgnoreList
-
-        Map auditableMap = getAuditableMap(domain)
-        if (auditableMap?.containsKey('ignore')) {
-            log.debug "Found an ignore list on this entity ${domain.class.name}"
-            def list = auditableMap['ignore']
-            if (list instanceof List) {
-                ignore = list
-            }
-        }
-
-        return ignore
     }
 
     /**
@@ -325,10 +254,10 @@ class AuditLogListener extends AbstractPersistenceEventListener {
 
     Set<String> filterProperties(Set<String> properties, domain) {
         // remove all ignored properties
-        properties.removeAll(ignoreList(domain))
+        properties.removeAll(AuditClosureLookup.ignoreList(domain.class, defaultIgnoreList))
 
         // intersect with included properties
-        properties.intersect(includeList(domain))
+        properties.intersect(AuditClosureLookup.includeList(domain.class, defaultIncludeList))
     }
 
     /**
