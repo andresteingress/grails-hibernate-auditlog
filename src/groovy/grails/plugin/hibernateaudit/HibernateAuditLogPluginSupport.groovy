@@ -6,7 +6,7 @@ class HibernateAuditLogPluginSupport {
 
     static doWithSpring = {
         auditLogListener(AuditLogListener, ref('hibernateDatastore'))  {
-            grailsApplication = ref('grailsApplication')
+            grailsApplication = application
             sessionFactory = ref('sessionFactory')
 
             sessionAttribute = application.config.auditLog.sessionAttribute ?: ""
