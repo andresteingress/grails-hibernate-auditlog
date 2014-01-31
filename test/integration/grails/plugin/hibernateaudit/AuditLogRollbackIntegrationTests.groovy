@@ -1,10 +1,7 @@
 package grails.plugin.hibernateaudit
 
-import grails.plugin.hibernateaudit.AuditLogListener
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
-import org.grails.haudit.AuditLogEvent
-import org.grails.haudit.Person
 import org.junit.Before
 import org.junit.Test
 import org.springframework.transaction.TransactionStatus

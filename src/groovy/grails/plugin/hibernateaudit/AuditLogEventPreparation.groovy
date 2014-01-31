@@ -1,7 +1,4 @@
 package grails.plugin.hibernateaudit
-
-import org.grails.haudit.AuditLogEvent
-
 /**
  * Prepare the audit log event right before it is stored in the DB.
  */

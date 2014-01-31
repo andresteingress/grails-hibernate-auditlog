@@ -1,4 +1,4 @@
-package org.grails.haudit
+package grails.plugin.hibernateaudit
 
 class TestPerson {
 

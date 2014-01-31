@@ -2,9 +2,6 @@ package grails.plugin.hibernateaudit
 
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
-import grails.plugin.hibernateaudit.AuditLogListener
-import grails.plugin.hibernateaudit.AuditableDomainObject
-import org.grails.haudit.Person
 import org.junit.Before
 import org.junit.Test
 

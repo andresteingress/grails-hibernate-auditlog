@@ -1,6 +1,5 @@
 package grails.plugin.hibernateaudit
 
-import org.grails.haudit.AuditLogEvent
 import org.hibernate.StatelessSession
 
 /**

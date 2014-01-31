@@ -4,7 +4,6 @@ import groovy.util.logging.Commons
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.grails.datastore.mapping.core.Datastore
 import org.grails.datastore.mapping.engine.event.*
-import org.grails.haudit.AuditLogEvent
 import org.hibernate.SessionFactory
 import org.springframework.context.ApplicationEvent
 import org.springframework.web.context.request.RequestContextHolder

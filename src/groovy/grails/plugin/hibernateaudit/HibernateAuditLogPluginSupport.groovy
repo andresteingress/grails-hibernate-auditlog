@@ -1,7 +1,4 @@
 package grails.plugin.hibernateaudit
-
-import org.grails.haudit.AuditLogEvent
-
 /**
  * Hibernate audit plugin support class.
  */
@@ -12,11 +9,11 @@ class HibernateAuditLogPluginSupport {
             grailsApplication = ref('grailsApplication')
             sessionFactory = ref('sessionFactory')
 
-            sessionAttribute = grailsApplication.config.auditLog.sessionAttribute ?: ""
-            actorKey = grailsApplication.config.auditLog.actorKey ?: ""
-            truncateLength = grailsApplication.config.auditLog.truncateLength ?: AuditLogEvent.MAX_SIZE
-            // actorClosure = grailsApplication.config.auditLog.actorClosure ?: AuditLogListenerUtil.actorDefaultGetter
-            defaultIgnoreList = grailsApplication.config.auditLog.defaultIgnore?.asImmutable() ?: ['version', 'lastUpdated'].asImmutable()
+            sessionAttribute = application.config.auditLog.sessionAttribute ?: ""
+            actorKey = application.config.auditLog.actorKey ?: ""
+            truncateLength = application.config.auditLog.truncateLength ?: AuditLogEvent.MAX_SIZE
+            // actorClosure = application.config.auditLog.actorClosure ?: AuditLogListenerUtil.actorDefaultGetter
+            defaultIgnoreList = application.config.auditLog.defaultIgnore?.asImmutable() ?: ['version', 'lastUpdated'].asImmutable()
         }
     }
 }

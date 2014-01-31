@@ -1,8 +1,5 @@
 package grails.plugin.hibernateaudit
 
-import grails.plugin.hibernateaudit.AuditLogEventPreparation
-import grails.plugin.hibernateaudit.AuditLogListener
-import org.grails.haudit.AuditLogEvent
 import org.junit.Test
 
 class AuditLogEventPreparationTests {
