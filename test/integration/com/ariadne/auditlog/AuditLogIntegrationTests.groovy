@@ -34,7 +34,6 @@ class AuditLogIntegrationTests extends GroovyTestCase {
         assert auditLog.propertyName == 'name'
 
         assert auditLog.dateCreated != null
-        assert auditLog.lastUpdated != null
 
         assert auditLog.actor == "system"
 
@@ -64,7 +63,6 @@ class AuditLogIntegrationTests extends GroovyTestCase {
         assert auditLog.oldValue == 'Andre'
 
         assert auditLog.dateCreated != null
-        assert auditLog.lastUpdated != null
 
         assert auditLog.actor == "system"
     }

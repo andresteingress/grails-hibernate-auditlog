@@ -5,6 +5,7 @@ import groovy.util.logging.Commons
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.grails.datastore.mapping.core.Datastore
 import org.grails.datastore.mapping.engine.event.*
+import org.hibernate.SessionFactory
 import org.springframework.context.ApplicationEvent
 import org.springframework.web.context.request.RequestContextHolder
 
@@ -26,6 +27,8 @@ class AuditLogListener extends AbstractPersistenceEventListener {
     // Global list of attribute changes to ignore, defaults to ['version', 'lastUpdated']
     List<String> defaultIncludeList
     List<String> defaultIgnoreList
+
+    SessionFactory sessionFactory
 
     final AuditLogEventActions auditClosureActions
 

@@ -11,7 +11,6 @@ class AuditLogEvent implements Serializable {
     static MAX_SIZE = 65534
 
     Date dateCreated
-    Date lastUpdated
 
     String actor
     String uri
@@ -37,12 +36,6 @@ class AuditLogEvent implements Serializable {
 
     static mapping = {
         table Holders.config.auditLog.tablename ?: 'audit_log'
-
-        // Disable caching by setting auditLog.cacheDisabled = true in your app's Config.groovy
-        if (!Holders.config.auditLog.cacheDisabled) {
-            cache usage: 'read-only', include: 'non-lazy'
-        }
-
         version false
     }
 
@@ -64,7 +57,6 @@ class AuditLogEvent implements Serializable {
         def map = [
                 id: id,
                 dateCreated: dateCreated,
-                lastUpdated: lastUpdated,
 
                 actor: actor,
                 uri: uri,

@@ -35,8 +35,7 @@ auditLog.defaultInclude = []     // can specify a list of included properties - 
 auditLog.defaultIgnore = []      // can specify a list of properties that are ignored by the audit log
 
 // audit log persistence settings
-auditLog.cacheDisabled = true // Hibernate Cache for the audit log domain object
-auditLog.tablename = null // custom AuditLog table name
+auditLog.tablename = null        // custom AuditLog table name
 auditLog.truncateLength = null   // can provide a maximum length for values in the audit log
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination

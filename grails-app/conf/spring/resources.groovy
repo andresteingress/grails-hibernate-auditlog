@@ -6,6 +6,8 @@ import com.ariadne.domain.AuditLogEvent
 beans = {
     auditLogListener(AuditLogListener, ref('hibernateDatastore'))  {
         grailsApplication = ref('grailsApplication')
+        sessionFactory = ref('sessionFactory')
+
         sessionAttribute = grailsApplication.config.auditLog.sessionAttribute ?: ""
         actorKey = grailsApplication.config.auditLog.actorKey ?: ""
         truncateLength = grailsApplication.config.auditLog.truncateLength ?: AuditLogEvent.MAX_SIZE

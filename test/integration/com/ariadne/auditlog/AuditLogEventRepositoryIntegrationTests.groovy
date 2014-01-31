@@ -33,7 +33,6 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         assert auditLogEvent.className == 'Person'
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_INSERT
-        assert auditLogEvent.lastUpdated != null
         assert auditLogEvent.newValue == 'Andre'
         assert auditLogEvent.oldValue == null
         assert auditLogEvent.persistedObjectId == p.id as String
@@ -53,7 +52,6 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         assert auditLogEvent.className == 'Person'
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_UPDATE
-        assert auditLogEvent.lastUpdated != null
         assert auditLogEvent.newValue == 'Max'
         assert auditLogEvent.oldValue == 'Andre'
         assert auditLogEvent.persistedObjectId == p.id as String

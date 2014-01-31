@@ -14,6 +14,7 @@ class AuditLogEventPreparation {
     }
 
     AuditLogEvent prepare(AuditLogEvent auditLogEvent)  {
+        auditLogEvent.dateCreated = new Date()
         auditLogEvent.newValue = truncate(auditLogEvent.newValue)
         auditLogEvent.oldValue = truncate(auditLogEvent.oldValue)
         auditLogEvent
