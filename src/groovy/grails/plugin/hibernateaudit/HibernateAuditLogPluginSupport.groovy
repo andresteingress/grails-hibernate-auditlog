@@ -11,6 +11,8 @@ class HibernateAuditLogPluginSupport {
     static doWithSpring = {
         if (!application.config.auditLog.disabled)  {
 
+            log.info "Hibernate Audit Log Plugin enabled."
+
             auditLogListener(AuditLogListener, ref('hibernateDatastore'))  {
                 grailsApplication = application
                 sessionFactory = ref('sessionFactory')
@@ -29,6 +31,9 @@ class HibernateAuditLogPluginSupport {
         def appCtx = event.ctx
 
         if (appCtx.auditLogListener)  {
+
+            log.info "Reloading Hibernate Audit Log Plugin configuration"
+
             def listener = appCtx.auditLogListener
             listener.sessionAttribute = config.auditLog.sessionAttribute ?: ""
             listener.actorKey = config.auditLog.actorKey ?: ""
