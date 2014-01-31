@@ -1,7 +1,4 @@
-package com.ariadne.auditlog
-
-import com.ariadne.domain.AuditLogEvent
-
+package org.grails.haudit
 /**
  * Prepare the audit log event right before it is stored in the DB.
  */

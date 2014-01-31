@@ -1,4 +1,4 @@
-package com.ariadne.auditlog
+package org.grails.haudit
 
 import groovy.util.logging.Commons
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest

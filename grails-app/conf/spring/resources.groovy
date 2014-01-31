@@ -1,6 +1,6 @@
-import com.ariadne.auditlog.AuditLogListener
-import com.ariadne.auditlog.AuditLogListenerUtil
-import com.ariadne.domain.AuditLogEvent
+import org.grails.haudit.AuditLogListener
+import org.grails.haudit.AuditLogListenerUtil
+import org.grails.haudit.AuditLogEvent
 
 // Place your Spring DSL code here
 beans = {

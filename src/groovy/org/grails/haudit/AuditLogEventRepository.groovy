@@ -1,6 +1,5 @@
-package com.ariadne.auditlog
+package org.grails.haudit
 
-import com.ariadne.domain.AuditLogEvent
 import org.hibernate.StatelessSession
 
 /**

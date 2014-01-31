@@ -1,4 +1,4 @@
-package com.ariadne.auditlog
+package org.grails.haudit
 
 import org.grails.datastore.mapping.reflect.ClassPropertyFetcher
 

@@ -1,4 +1,4 @@
-package com.ariadne.auditlog
+package org.grails.haudit
 
 import grails.util.Holders
 import org.codehaus.groovy.grails.commons.GrailsDomainClass

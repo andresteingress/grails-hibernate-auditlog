@@ -1,6 +1,8 @@
-package com.ariadne.auditlog
+package org.grails.haudit
 
-import com.ariadne.domain.AuditLogEvent
+import org.grails.haudit.AuditLogEvent
+import org.grails.haudit.AuditLogEventPreparation
+import org.grails.haudit.AuditLogListener
 import org.junit.Test
 
 class AuditLogEventPreparationTests {

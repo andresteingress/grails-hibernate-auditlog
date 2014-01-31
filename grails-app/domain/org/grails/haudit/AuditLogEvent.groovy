@@ -1,4 +1,4 @@
-package com.ariadne.domain
+package org.grails.haudit
 
 import grails.util.Holders
 

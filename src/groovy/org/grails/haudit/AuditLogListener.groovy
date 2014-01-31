@@ -1,6 +1,5 @@
-package com.ariadne.auditlog
+package org.grails.haudit
 
-import com.ariadne.domain.AuditLogEvent
 import groovy.util.logging.Commons
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.grails.datastore.mapping.core.Datastore

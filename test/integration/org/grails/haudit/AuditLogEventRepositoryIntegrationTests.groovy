@@ -1,9 +1,11 @@
-package com.ariadne.auditlog
+package org.grails.haudit
 
-import com.ariadne.domain.AuditLogEvent
-import com.ariadne.domain.Person
+import org.grails.haudit.AuditLogEvent
+import org.grails.haudit.Person
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
+import org.grails.haudit.AuditLogEventRepository
+import org.grails.haudit.AuditLogListener
 import org.junit.Before
 import org.junit.Test
 
