@@ -30,6 +30,7 @@ Enables audit logging for Grails domain classes based on the Hibernate datastore
     def issueManagement = [ system: "GIT", url: "https://github.com/andresteingress/grails-auditlog/issues" ]
     def scm = [ url: "https://github.com/andresteingress/grails-auditlog" ]
 
+    def loadAfter = ['hibernate']
     def observe = ['domainClass']
 
     def doWithSpring = HibernateAuditLogPluginSupport.doWithSpring
