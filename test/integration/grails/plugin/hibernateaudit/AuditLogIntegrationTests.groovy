@@ -1,10 +1,10 @@
 package grails.plugin.hibernateaudit
 
-import grails.plugin.hibernateaudit.AuditLogListener
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
 import org.grails.haudit.AuditLogEvent
 import org.grails.haudit.Person
+import org.grails.haudit.TestPerson
 import org.junit.Before
 import org.junit.Test
 
@@ -63,5 +63,28 @@ class AuditLogIntegrationTests extends GroovyTestCase {
         assert auditLog.dateCreated != null
 
         assert auditLog.actor == "system"
+    }
+
+    @Test
+    void insertEventWithLocalLists() {
+
+        auditLogListener.defaultIncludeList = []
+        auditLogListener.defaultIgnoreList = []
+
+        def p = new TestPerson(name: "Andre", surName: "Steingress").save(flush: true)
+
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassName(p.id as String, TestPerson.class.simpleName)
+        assert auditLog
+
+        assert auditLog.eventName == 'INSERT'
+
+        assert auditLog.persistedObjectId == p.id as String
+        assert auditLog.className == TestPerson.class.simpleName
+        assert auditLog.propertyName == 'name'
+
+        assert auditLog.dateCreated != null
+
+        assert auditLog.actor == "system"
+
     }
 }

@@ -1,6 +1,5 @@
 package grails.plugin.hibernateaudit
 
-import grails.plugin.hibernateaudit.ClosureReader
 import org.grails.haudit.TestPerson
 import org.junit.Test
 
