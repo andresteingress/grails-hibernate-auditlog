@@ -1,4 +1,4 @@
-grails-auditlog
+grails-hibernate-audit-log
 ===============
 
-Example Project with Grails Audit Log (custom version)
+Grails Hibernate Audit Log Plugin
