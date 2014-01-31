@@ -1,13 +1,11 @@
 package org.grails.haudit
 
-import org.grails.haudit.AuditLogEvent
-import org.grails.haudit.Person
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
-import org.grails.haudit.AuditLogListener
 import org.hibernate.SessionFactory
 import org.junit.Before
 import org.junit.Test
+import org.springframework.transaction.TransactionStatus
 
 class AuditLogIntegrationTests extends GroovyTestCase {
 
@@ -22,7 +20,7 @@ class AuditLogIntegrationTests extends GroovyTestCase {
     }
 
     @Test
-    void testInsertEvent() {
+    void insertEvent() {
         def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
 
         def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassName(p.id as String, Person.class.simpleName)
@@ -40,10 +38,8 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
     }
 
-    SessionFactory sessionFactory
-
     @Test
-    void testUpdateEvent() {
+    void updateEvent() {
         def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
 
         p.name = 'Maxi'
