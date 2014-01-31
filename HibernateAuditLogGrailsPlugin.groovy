@@ -5,7 +5,7 @@ import grails.plugin.hibernateaudit.HibernateAuditLogPluginSupport
  */
 class HibernateAuditLogGrailsPlugin {
 
-    def version = "0.3-SNAPSHOT"
+    def version = "0.6-SNAPSHOT"
     def grailsVersion = "2.1 > *"
 
     // resources that are excluded from plugin packaging
@@ -30,21 +30,9 @@ Enables audit logging for Grails domain classes based on the Hibernate datastore
     def issueManagement = [ system: "GIT", url: "https://github.com/andresteingress/grails-auditlog/issues" ]
     def scm = [ url: "https://github.com/andresteingress/grails-auditlog" ]
 
-    def observe = ['domain']
+    def observe = ['domainClass']
 
     def doWithSpring = HibernateAuditLogPluginSupport.doWithSpring
 
-    def onChange = { event ->
-        def source = event.source
-        def grailsApplication = event.application
-        def applicationContext = event.ctx
-
-        println 'domain class RELOADED'
-    }
-
-    def onConfigChange = { event ->
-
-        println  'configuration changed'
-
-    }
+    def onConfigChange = HibernateAuditLogPluginSupport.onConfigChange
 }
