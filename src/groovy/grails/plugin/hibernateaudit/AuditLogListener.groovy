@@ -1,6 +1,6 @@
 package grails.plugin.hibernateaudit
 
-import groovy.util.logging.Commons
+import groovy.util.logging.Log4j
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.grails.datastore.mapping.core.Datastore
 import org.grails.datastore.mapping.engine.event.*
@@ -12,7 +12,7 @@ import org.springframework.web.context.request.RequestContextHolder
  * Grails interceptor for logging saves, updates, deletes and acting on
  * individual properties changes and delegating calls back to the Domain Class
  */
-@Commons
+@Log4j
 class AuditLogListener extends AbstractPersistenceEventListener {
 
     GrailsApplication grailsApplication
@@ -79,7 +79,7 @@ class AuditLogListener extends AbstractPersistenceEventListener {
 
     @Override
     protected void onPersistenceEvent(AbstractPersistenceEvent event) {
-        if (ClosureReader.isAuditable(event.entityObject?.class)) {
+        if (AuditableClosureReader.isAuditable(event.entityObject?.class)) {
             log.trace "Audit logging: ${event.eventType.name()} for ${event.entityObject.class.name}"
 
             switch(event.eventType) {

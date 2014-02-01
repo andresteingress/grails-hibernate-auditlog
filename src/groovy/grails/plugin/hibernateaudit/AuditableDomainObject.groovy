@@ -1,11 +1,13 @@
 package grails.plugin.hibernateaudit
 
 import grails.util.Holders
+import groovy.util.logging.Log4j
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
 
 /**
  * Encapsulates a domain object and can be used to convert it into a map.
  */
+@Log4j
 class AuditableDomainObject {
 
     final AuditLogListener logListener
@@ -23,11 +25,11 @@ class AuditableDomainObject {
 
     private Collection<String> filterProperties(Collection<String> properties, domain) {
         // remove all ignored properties
-        properties.removeAll(ClosureReader.ignoreList(domain.class, logListener.defaultIgnoreList))
+        properties.removeAll(AuditableClosureReader.ignoreList(domain.class, logListener.defaultIgnoreList))
 
         if (logListener.defaultIncludeList)  {
             // intersect with included properties
-            properties = properties.intersect(ClosureReader.includeList(domain.class, logListener.defaultIncludeList))
+            properties = properties.intersect(AuditableClosureReader.includeList(domain.class, logListener.defaultIncludeList))
         }
 
         properties
@@ -50,11 +52,11 @@ class AuditableDomainObject {
         return domain."${identifier.name}"
     }
 
-    def getClassName() {
+    String getClassName() {
         return domainClass.shortName
     }
 
-    def getDirtyPropertyNames() {
+    List<String> getDirtyPropertyNames() {
         return domain.dirtyPropertyNames
     }
 }

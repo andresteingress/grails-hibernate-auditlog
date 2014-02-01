@@ -3,8 +3,7 @@ package grails.plugin.hibernateaudit
 import grails.util.Holders
 
 /**
- * AuditLogEvents are reported to the AuditLog table this requires you to set up a table or allow
- * Grails to create a table for you.
+ * Audit log event domain class representing changes to Grails domain objects.
  */
 class AuditLogEvent implements Serializable {
 

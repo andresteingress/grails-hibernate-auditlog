@@ -5,7 +5,7 @@ import org.grails.datastore.mapping.reflect.ClassPropertyFetcher
 /**
  * Looks up values from the static audible closure or Boolean value.
  */
-class ClosureReader {
+class AuditableClosureReader {
 
     static final String PROPERTY_NAME = "auditable"
 

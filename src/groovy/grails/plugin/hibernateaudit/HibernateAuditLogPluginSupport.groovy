@@ -1,11 +1,11 @@
 package grails.plugin.hibernateaudit
 
-import groovy.util.logging.Commons
+import groovy.util.logging.Log4j
 
 /**
  * Hibernate audit plugin support class.
  */
-@Commons
+@Log4j
 class HibernateAuditLogPluginSupport {
 
     static doWithSpring = {
@@ -20,7 +20,7 @@ class HibernateAuditLogPluginSupport {
                 sessionAttribute = application.config.auditLog.sessionAttribute ?: ""
                 actorKey = application.config.auditLog.actorKey ?: ""
                 truncateLength = application.config.auditLog.truncateLength ?: AuditLogEvent.MAX_SIZE
-                // actorClosure = application.config.auditLog.actorClosure ?: AuditLogListenerUtil.actorDefaultGetter
+                // actorClosure = application.config.auditLog.actorClosure
                 defaultIgnoreList = application.config.auditLog.defaultIgnore?.asImmutable() ?: ['version', 'lastUpdated'].asImmutable()
             }
         }
@@ -38,7 +38,7 @@ class HibernateAuditLogPluginSupport {
             listener.sessionAttribute = config.auditLog.sessionAttribute ?: ""
             listener.actorKey = config.auditLog.actorKey ?: ""
             listener.truncateLength = config.auditLog.truncateLength ?: AuditLogEvent.MAX_SIZE
-            // listener.actorClosure = application.config.auditLog.actorClosure ?: AuditLogListenerUtil.actorDefaultGetter
+            // listener.actorClosure = application.config.auditLog.actorClosure
             listener.defaultIgnoreList = config.auditLog.defaultIgnore?.asImmutable() ?: ['version', 'lastUpdated'].asImmutable()
         }
     }

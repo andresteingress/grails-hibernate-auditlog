@@ -1,11 +1,11 @@
 package grails.plugin.hibernateaudit
 
-import groovy.util.logging.Commons
+import groovy.util.logging.Log4j
 
 /**
  * Central class that dispatches to the underlying audit log event table.
  */
-@Commons
+@Log4j
 class AuditLogEventActions {
 
     final AuditLogListener auditLogListener
