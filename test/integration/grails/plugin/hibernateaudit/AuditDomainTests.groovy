@@ -12,7 +12,7 @@ class AuditDomainTests extends GroovyTestCase {
     @Before
     void setUp() {
         auditLogListener.defaultIncludeList = ['name']
-        auditLogListener.defaultIgnoreList = []
+        auditLogListener.defaultExcludeList = []
 
         auditLogListener.actorClosure = { GrailsWebRequest request, GrailsHttpSession session -> "system" }
     }

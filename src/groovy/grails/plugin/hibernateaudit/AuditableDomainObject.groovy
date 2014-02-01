@@ -24,8 +24,8 @@ class AuditableDomainObject {
     }
 
     private Collection<String> filterProperties(Collection<String> properties, domain) {
-        // remove all ignored properties
-        properties.removeAll(AuditableClosureReader.ignoreList(domain.class, logListener.defaultIgnoreList))
+        // remove all excluded properties
+        properties.removeAll(AuditableClosureReader.excludeList(domain.class, logListener.defaultExcludeList))
 
         if (logListener.defaultIncludeList)  {
             // intersect with included properties

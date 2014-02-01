@@ -12,7 +12,7 @@ class AuditLogIntegrationTests extends GroovyTestCase {
     @Before
     void setUp() {
         auditLogListener.defaultIncludeList = ['name']
-        auditLogListener.defaultIgnoreList = []
+        auditLogListener.defaultExcludeList = []
 
         auditLogListener.actorClosure = { GrailsWebRequest request, GrailsHttpSession session -> "system" }
     }
@@ -66,7 +66,7 @@ class AuditLogIntegrationTests extends GroovyTestCase {
     void insertEventWithLocalLists() {
 
         auditLogListener.defaultIncludeList = []
-        auditLogListener.defaultIgnoreList = []
+        auditLogListener.defaultExcludeList = []
 
         def p = new TestPerson(name: "Andre", surName: "Steingress").save(flush: true)
 

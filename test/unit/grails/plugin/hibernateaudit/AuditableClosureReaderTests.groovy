@@ -5,8 +5,8 @@ import org.junit.Test
 class AuditableClosureReaderTests {
 
     @Test
-    void readIgnoreList() {
-        assert ['surName'] == AuditableClosureReader.ignoreList(TestPerson.class)
+    void readExcludeList() {
+        assert ['surName'] == AuditableClosureReader.excludeList(TestPerson.class)
     }
 
     @Test

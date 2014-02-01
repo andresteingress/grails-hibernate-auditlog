@@ -23,7 +23,7 @@ auditLog.actorClosure = {  GrailsWebRequest request, GrailsHttpSession session -
 }
 
 auditLog.defaultInclude = []     // can specify a list of included properties - all others are automatically excluded
-auditLog.defaultIgnore = []      // can specify a list of properties that are ignored by the audit log
+auditLog.defaultExclude = []      // can specify a list of properties that are ignored by the audit log
 
 // audit log persistence settings
 auditLog.tablename = null        // custom AuditLog table name
@@ -47,13 +47,47 @@ On every insert or update operation, the Hibernate audit log plugin creates a ne
 domain class and stores it in the current transaction. A separate `AuditLogEvent` is created for every property change
 the occurred to the target domain class.
 
-Without further configuration all domain class properties are eligible for audit logging. To narrowing to exact
- properties to include or exclude, the `auditable property might specify a `Map`:
+```groovy
+class AuditLogEvent {
+
+    Date dateCreated
+
+    String actor
+    String uri
+    String className
+    String persistedObjectId
+
+    String eventName
+    String propertyName
+    String oldValue
+    String newValue
+
+    // ...
+}
+```
+
+The default name for the audit log event table is `audit_log` but can be changed with the `auditLog.tablename`
+configuration property.
+
+Without further configuration all domain class properties are eligible for audit logging. To narrowing down exact
+ properties to include or exclude, the `auditable` property might specify a `Map`:
 
 ```groovy
 
 class Person {
-    static auditable = [ include: ['name] ]
+    static auditable = [ include: ['name'] ]  // exclusive include
+
+    String name
+    String surName
+}
+```
+
+or
+
+```groovy
+
+class Person {
+    static auditable = [ exclude: ['name'] ]  //
 
     String name
     String surName

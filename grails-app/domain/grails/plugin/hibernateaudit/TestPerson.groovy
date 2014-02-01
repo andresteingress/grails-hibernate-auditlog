@@ -2,7 +2,7 @@ package grails.plugin.hibernateaudit
 
 class TestPerson {
 
-    static auditable = [ignore: ['surName'], include: ['name']]
+    static auditable = [exclude: ['surName'], include: ['name']]
 
     String name
     String surName

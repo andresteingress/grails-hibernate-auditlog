@@ -19,7 +19,7 @@ auditLog.actorClosure = {  GrailsWebRequest request, GrailsHttpSession session -
 }
 
 auditLog.defaultInclude = []     // can specify a list of included properties - all others are automatically excluded
-auditLog.defaultIgnore = []      // can specify a list of properties that are ignored by the audit log
+auditLog.defaultExclude = []      // can specify a list of properties that are ignored by the audit log
 
 // audit log persistence settings
 auditLog.tablename = null        // custom AuditLog table name

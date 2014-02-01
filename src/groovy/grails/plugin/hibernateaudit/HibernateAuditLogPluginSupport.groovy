@@ -21,7 +21,7 @@ class HibernateAuditLogPluginSupport {
                 actorKey = application.config.auditLog.actorKey ?: ""
                 truncateLength = application.config.auditLog.truncateLength ?: AuditLogEvent.MAX_SIZE
                 // actorClosure = application.config.auditLog.actorClosure
-                defaultIgnoreList = application.config.auditLog.defaultIgnore?.asImmutable() ?: ['version', 'lastUpdated'].asImmutable()
+                defaultExcludeList = application.config.auditLog.defaultExclude?.asImmutable() ?: ['version', 'lastUpdated'].asImmutable()
             }
         }
     }
@@ -39,7 +39,7 @@ class HibernateAuditLogPluginSupport {
             listener.actorKey = config.auditLog.actorKey ?: ""
             listener.truncateLength = config.auditLog.truncateLength ?: AuditLogEvent.MAX_SIZE
             // listener.actorClosure = application.config.auditLog.actorClosure
-            listener.defaultIgnoreList = config.auditLog.defaultIgnore?.asImmutable() ?: ['version', 'lastUpdated'].asImmutable()
+            listener.defaultExcludeList = config.auditLog.defaultExclude?.asImmutable() ?: ['version', 'lastUpdated'].asImmutable()
         }
     }
 }

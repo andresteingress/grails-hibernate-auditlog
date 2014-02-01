@@ -23,9 +23,8 @@ class AuditLogListener extends AbstractPersistenceEventListener {
     String actorKey
     Closure actorClosure
 
-    // Global list of attribute changes to ignore, defaults to ['version', 'lastUpdated']
     List<String> defaultIncludeList
-    List<String> defaultIgnoreList
+    List<String> defaultExcludeList
 
     SessionFactory sessionFactory
 

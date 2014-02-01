@@ -10,7 +10,7 @@ class AuditableClosureReader {
     static final String PROPERTY_NAME = "auditable"
 
     static final String INCLUDE = "include"
-    static final String IGNORE  = "ignore"
+    static final String EXCLUDE = "exclude"
 
     static boolean isAuditable(Class<?> cls)  {
         if (cls == null) return false
@@ -22,8 +22,8 @@ class AuditableClosureReader {
         return value == true || value instanceof Map
     }
 
-    static List<String> ignoreList(Class<?> cls, List<String> defaultValues = []) {
-        return lookupAuditableMapValue(cls, IGNORE, defaultValues)
+    static List<String> excludeList(Class<?> cls, List<String> defaultValues = []) {
+        return lookupAuditableMapValue(cls, EXCLUDE, defaultValues)
     }
 
     static List<String> includeList(Class<?> cls, List<String> defaultValues = []) {
