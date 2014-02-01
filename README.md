@@ -1,7 +1,7 @@
 Grails Hibernate Audit Log Plugin
 ===============
 
-Grails plugin enabling so-called audit logging for Hibernate domain classes.
+Grails plugin enabling _audit logging_ for Hibernate domain classes.
 
 Here is a default configuration:
 
@@ -87,7 +87,7 @@ or
 ```groovy
 
 class Person {
-    static auditable = [ exclude: ['name'] ]  //
+    static auditable = [ exclude: ['name'] ]  // inclusive exclude
 
     String name
     String surName
