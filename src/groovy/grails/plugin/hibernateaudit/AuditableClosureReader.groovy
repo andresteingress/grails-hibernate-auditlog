@@ -30,10 +30,17 @@ class AuditableClosureReader {
         return lookupAuditableMapValue(cls, INCLUDE, defaultValues)
     }
 
-    protected static <T> T lookupAuditableMapValue(Class<?> cls, String key, def defaultValue) {
+    protected static List<String> lookupAuditableMapValue(Class<?> cls, String key, List<String> defaultValue) {
         def auditableMap = getAuditableMapIfAvailable(cls)
         if (!auditableMap) return defaultValue
-        return (auditableMap[key] ?: defaultValue) as T
+        def val = auditableMap[key] ?: defaultValue
+
+        // wrap in a list if it's a single element
+        if (!(val instanceof List)) {
+            val = [val]
+        }
+
+        return val as List<String>
     }
 
     protected static Map getAuditableMapIfAvailable(Class<?> cls) {

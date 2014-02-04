@@ -14,4 +14,14 @@ class AuditableClosureReaderTests {
         assert ['name'] == AuditableClosureReader.includeList(TestPerson.class)
     }
 
+    @Test
+    void readIncludeListSingleElement() {
+        assert ['name'] == AuditableClosureReader.includeList(TestPerson2.class)
+    }
+
+    @Test
+    void readExcludeListSingleElement() {
+        assert ['surName'] == AuditableClosureReader.excludeList(TestPerson2.class)
+    }
 }
+

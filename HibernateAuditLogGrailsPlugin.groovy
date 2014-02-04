@@ -14,7 +14,7 @@ class HibernateAuditLogGrailsPlugin {
 
         // exclude the test domain classes
         "grails-app/domain/grails/plugin/hibernateaudit/Person.groovy",
-        "grails-app/domain/grails/plugin/hibernateaudit/TestPerson.groovy"
+        "grails-app/domain/grails/plugin/hibernateaudit/Test*.groovy"
     ]
 
     def title = "Grails Hibernate Audit Event Log Plugin"
