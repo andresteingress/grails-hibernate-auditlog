@@ -21,7 +21,7 @@ class AuditLogEventRepository {
     }
     def insert(AuditableDomainObject domain) {
         withStatelessSession { StatelessSession session ->
-            def type = auditLogListener.defaultInsertAuditLogType
+            def type = domain.insertAuditLogType()
             if (type in [AuditLogType.FULL, AuditLogType.MEDIUM])  {
                 def map = domain.toMap()
                 map.each { key, value ->
@@ -40,7 +40,7 @@ class AuditLogEventRepository {
         if (!dirtyProperties) return
 
         withStatelessSession { StatelessSession session ->
-            def type = auditLogListener.defaultUpdateAuditLogType
+            def type = domain.updateAuditLogType()
             if (type in [AuditLogType.FULL, AuditLogType.MEDIUM])  {
                 Map newMap = domain.toMap(dirtyProperties)
                 Map oldMap = domain.toPersistentValueMap(dirtyProperties)
@@ -61,7 +61,7 @@ class AuditLogEventRepository {
 
     def delete(AuditableDomainObject domain) {
         withStatelessSession { StatelessSession session ->
-            def type = auditLogListener.defaultDeleteAuditLogType
+            def type = domain.deleteAuditLogType()
             if (type in [AuditLogType.FULL, AuditLogType.MEDIUM])  {
                 def map = domain.toMap()
                 map.each { key, value ->

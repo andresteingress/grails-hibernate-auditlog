@@ -88,4 +88,45 @@ class AuditLogIntegrationTests extends GroovyTestCase {
         assert auditLog.actor == "system"
 
     }
+
+    @Test
+    void insertEventWithShortAuditLogType() {
+        def p = new TestPerson3(name: "Andre", surName: "Steingress").save(flush: true)
+
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassName(p.id as String, TestPerson3.class.simpleName)
+        assert auditLog
+
+        assert auditLog.eventName == 'INSERT'
+        assert auditLog.persistedObjectId == p.id as String
+        assert auditLog.className == TestPerson3.class.simpleName
+        assert auditLog.dateCreated != null
+
+        assert auditLog.propertyName == null
+        assert auditLog.actor == null
+    }
+
+    @Test
+    void updateEventWithShortAuditType() {
+        def p = new TestPerson3(name: "Andre", surName: "Steingress").save(flush: true)
+
+        p.name = 'Maxi'
+        p.surName = 'Mustermann'
+        p.save(flush: true)
+
+        assert ['INSERT', 'UPDATE'] == AuditLogEvent.list(order: 'asc', sort: 'id')*.eventName
+
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassNameAndEventName(p.id as String, TestPerson3.class.simpleName, "UPDATE")
+        assert auditLog
+
+        assert auditLog.eventName == 'UPDATE'
+
+        assert auditLog.persistedObjectId == p.id as String
+        assert auditLog.className == TestPerson3.class.simpleName
+        assert auditLog.dateCreated != null
+
+        assert auditLog.actor == null
+        assert auditLog.propertyName == null
+        assert auditLog.newValue == null
+        assert auditLog.oldValue == null
+    }
 }

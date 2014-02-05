@@ -53,10 +53,22 @@ class AuditableDomainObject {
     }
 
     String getClassName() {
-        return domainClass.shortName
+        domainClass.shortName
     }
 
     List<String> getDirtyPropertyNames() {
-        return domain.dirtyPropertyNames
+        domain.dirtyPropertyNames
+    }
+
+    AuditLogType insertAuditLogType() {
+        AuditableClosureReader.insertAuditLogType(domain.class, logListener.defaultInsertAuditLogType)
+    }
+
+    AuditLogType updateAuditLogType() {
+        AuditableClosureReader.updateAuditLogType(domain.class, logListener.defaultUpdateAuditLogType)
+    }
+
+    AuditLogType deleteAuditLogType() {
+        AuditableClosureReader.deleteAuditLogType(domain.class, logListener.defaultDeleteAuditLogType)
     }
 }
