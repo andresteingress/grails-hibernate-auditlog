@@ -1,22 +1,16 @@
-import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
-import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
+import grails.plugin.hibernateaudit.AuditLogType
 
 // All audit log configuration variables
 auditLog.disabled = false        // globally disable audit logging
 
+// Configure insert, update, delete logging
+auditLog.defaultInsertAuditLogType = AuditLogType.SHORT
+auditLog.defaultUpdateAuditLogType = AuditLogType.MEDIUM
+auditLog.defaultDeleteAuditLogType = AuditLogType.NONE
+
 auditLog.sessionAttribute = ""   // the session attribute under which the actor name is found
 auditLog.actorKey = ""           // the request attribute key under which the actor name is found
-
-auditLog.actorClosure = {  GrailsWebRequest request, GrailsHttpSession session ->
-    if (request.applicationContext.springSecurityService.principal instanceof String){
-        return request.applicationContext.springSecurityService.principal
-    }
-    def username = request.applicationContext.springSecurityService.principal?.username
-    if (SpringSecurityUtils.isSwitched()){
-        username = SpringSecurityUtils.switchedUserOriginalUsername+" AS "+username
-    }
-    return username
-}
+auditLog.actorClosure = null
 
 auditLog.defaultInclude = []     // can specify a list of included properties - all others are automatically excluded
 auditLog.defaultExclude = []      // can specify a list of properties that are ignored by the audit log

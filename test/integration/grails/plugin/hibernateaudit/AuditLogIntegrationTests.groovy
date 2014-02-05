@@ -11,6 +11,10 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
     @Before
     void setUp() {
+        auditLogListener.defaultInsertAuditLogType = AuditLogType.FULL
+        auditLogListener.defaultUpdateAuditLogType = AuditLogType.FULL
+        auditLogListener.defaultDeleteAuditLogType = AuditLogType.FULL
+
         auditLogListener.defaultIncludeList = ['name']
         auditLogListener.defaultExcludeList = []
 

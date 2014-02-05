@@ -19,12 +19,16 @@ class AuditLogListener extends AbstractPersistenceEventListener {
 
     Integer truncateLength = AuditLogEvent.MAX_SIZE
 
-    String sessionAttribute
-    String actorKey
-    Closure actorClosure
+    String sessionAttribute = ""
+    String actorKey = ""
+    Closure actorClosure = null
 
-    List<String> defaultIncludeList
-    List<String> defaultExcludeList
+    List<String> defaultIncludeList = []
+    List<String> defaultExcludeList = []
+
+    AuditLogType defaultInsertAuditLogType = AuditLogType.FULL
+    AuditLogType defaultUpdateAuditLogType = AuditLogType.FULL
+    AuditLogType defaultDeleteAuditLogType = AuditLogType.FULL
 
     SessionFactory sessionFactory
 

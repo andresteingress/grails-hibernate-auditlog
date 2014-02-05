@@ -17,13 +17,20 @@ class AuditLogEventRepository {
     protected AuditLogEventRepository(AuditLogListener listener)  {
         this.auditLogListener = listener
         this.auditLogEventPreparation = new AuditLogEventPreparation(auditLogListener)
-    }
 
+    }
     def insert(AuditableDomainObject domain) {
         withStatelessSession { StatelessSession session ->
-            def map = domain.toMap()
-            map.each { key, value ->
-                saveAuditLogEvent(session, EVENT_NAME_INSERT, domain, key, value)
+            def type = auditLogListener.defaultInsertAuditLogType
+            if (type in [AuditLogType.FULL, AuditLogType.MEDIUM])  {
+                def map = domain.toMap()
+                map.each { key, value ->
+                    this."saveAuditLogEvent${type.toString()}"(session, EVENT_NAME_INSERT, domain, key, value)
+                }
+            }
+
+            if (type == AuditLogType.SHORT)  {
+                saveAuditLogEventSHORT(session, EVENT_NAME_INSERT, domain)
             }
         }
     }
@@ -32,24 +39,38 @@ class AuditLogEventRepository {
         Collection<String> dirtyProperties = domain.dirtyPropertyNames
         if (!dirtyProperties) return
 
-        Map newMap = domain.toMap(dirtyProperties)
-        Map oldMap = domain.toPersistentValueMap(dirtyProperties)
-
         withStatelessSession { StatelessSession session ->
-            newMap.each { String key, def value ->
-                def oldValue = oldMap[key]
-                if (oldValue != value)  {
-                    saveAuditLogEvent(session, EVENT_NAME_UPDATE, domain, key, value, oldValue)
+            def type = auditLogListener.defaultUpdateAuditLogType
+            if (type in [AuditLogType.FULL, AuditLogType.MEDIUM])  {
+                Map newMap = domain.toMap(dirtyProperties)
+                Map oldMap = domain.toPersistentValueMap(dirtyProperties)
+
+                newMap.each { String key, def value ->
+                    def oldValue = oldMap[key]
+                    if (oldValue != value)  {
+                        this."saveAuditLogEvent${type.toString()}"(session, EVENT_NAME_UPDATE, domain, key, value, oldValue)
+                    }
                 }
+            }
+
+            if (type == AuditLogType.SHORT)  {
+                saveAuditLogEventSHORT(session, EVENT_NAME_UPDATE, domain)
             }
         }
     }
 
     def delete(AuditableDomainObject domain) {
-        def map = domain.toMap()
         withStatelessSession { StatelessSession session ->
-            map.each { key, value ->
-                saveAuditLogEvent(session, EVENT_NAME_DELETE, domain, key, value)
+            def type = auditLogListener.defaultDeleteAuditLogType
+            if (type in [AuditLogType.FULL, AuditLogType.MEDIUM])  {
+                def map = domain.toMap()
+                map.each { key, value ->
+                    this."saveAuditLogEvent${type.toString()}"(session, EVENT_NAME_DELETE, domain, key, value)
+                }
+            }
+
+            if (type == AuditLogType.SHORT)  {
+                saveAuditLogEventSHORT(session, EVENT_NAME_DELETE, domain)
             }
         }
     }
@@ -63,7 +84,7 @@ class AuditLogEventRepository {
         }
     }
 
-    protected void saveAuditLogEvent(StatelessSession session, String eventName, AuditableDomainObject domain, String key, value, oldValue = null) {
+    protected void saveAuditLogEventFULL(StatelessSession session, String eventName, AuditableDomainObject domain, String key, value, oldValue = null) {
         def audit = auditLogEventPreparation.prepare new AuditLogEvent(
                 actor: auditLogListener.getActor(),
                 uri: auditLogListener.getUri(),
@@ -73,6 +94,38 @@ class AuditLogEventRepository {
                 propertyName: key,
                 oldValue: oldValue,
                 newValue: value)
+
+        if (!audit.validate()) throw new RuntimeException("Audit log event validation failed: ${audit.errors}")
+
+        session.insert(audit)
+    }
+
+    protected void saveAuditLogEventMEDIUM(StatelessSession session, String eventName, AuditableDomainObject domain, String key, value, oldValue = null) {
+        def audit = auditLogEventPreparation.prepare new AuditLogEvent(
+                actor: "",
+                uri: "",
+                className: domain.className,
+                eventName: eventName,
+                persistedObjectId: domain.id?.toString() ?: "NA",
+                propertyName: key,
+                oldValue: oldValue,
+                newValue: value)
+
+        if (!audit.validate()) throw new RuntimeException("Audit log event validation failed: ${audit.errors}")
+
+        session.insert(audit)
+    }
+
+    protected void saveAuditLogEventSHORT(StatelessSession session, String eventName, AuditableDomainObject domain) {
+        def audit = auditLogEventPreparation.prepare new AuditLogEvent(
+                actor: "",
+                uri: "",
+                className: domain.className,
+                eventName: eventName,
+                persistedObjectId: domain.id?.toString() ?: "NA",
+                propertyName: null,
+                oldValue: null,
+                newValue: null)
 
         if (!audit.validate()) throw new RuntimeException("Audit log event validation failed: ${audit.errors}")
 

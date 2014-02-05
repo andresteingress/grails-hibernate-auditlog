@@ -17,6 +17,10 @@ class HibernateAuditLogPluginSupport {
                 grailsApplication = application
                 sessionFactory = ref('sessionFactory')
 
+                defaultInsertAuditLogType = application.config.auditLog.defaultInsertAuditLogType ?: AuditLogType.FULL
+                defaultUpdateAuditLogType = application.config.auditLog.defaultUpdateAuditLogType ?: AuditLogType.FULL
+                defaultDeleteAuditLogType = application.config.auditLog.defaultDeleteAuditLogType ?: AuditLogType.FULL
+
                 sessionAttribute = application.config.auditLog.sessionAttribute ?: ""
                 actorKey = application.config.auditLog.actorKey ?: ""
                 truncateLength = application.config.auditLog.truncateLength ?: AuditLogEvent.MAX_SIZE
@@ -31,10 +35,14 @@ class HibernateAuditLogPluginSupport {
         def appCtx = event.ctx
 
         if (appCtx.auditLogListener)  {
-
             log.info "Reloading Hibernate Audit Log Plugin configuration"
 
             def listener = appCtx.auditLogListener
+
+            listener.defaultInsertAuditLogType = application.config.auditLog.defaultInsertAuditLogType ?: AuditLogType.FULL
+            listener.defaultUpdateAuditLogType = application.config.auditLog.defaultUpdateAuditLogType ?: AuditLogType.FULL
+            listener.defaultDeleteAuditLogType = application.config.auditLog.defaultDeleteAuditLogType ?: AuditLogType.FULL
+
             listener.sessionAttribute = config.auditLog.sessionAttribute ?: ""
             listener.actorKey = config.auditLog.actorKey ?: ""
             listener.truncateLength = config.auditLog.truncateLength ?: AuditLogEvent.MAX_SIZE

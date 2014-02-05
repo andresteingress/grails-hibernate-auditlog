@@ -11,12 +11,16 @@ class AuditLogEvent implements Serializable {
 
     Date dateCreated
 
+    // principal and URI
     String actor
     String uri
+
+    // event domain object info
+    String eventName
     String className
     String persistedObjectId
 
-    String eventName
+    // property name and values
     String propertyName
     String oldValue
     String newValue
