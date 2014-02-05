@@ -23,7 +23,7 @@ class AuditDomainTests extends GroovyTestCase {
         def auditDomain = new AuditableDomainObject(auditLogListener, p)
 
         assert auditDomain.logListener != null
-        assert auditDomain.className == 'Person'
+        assert auditDomain.className == 'Tester'
         assert auditDomain.id == p.id
         assert auditDomain.domainClass != null
         assert auditDomain.toMap() == [name: "Andre"]

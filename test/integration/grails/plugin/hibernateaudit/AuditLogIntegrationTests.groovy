@@ -58,8 +58,8 @@ class AuditLogIntegrationTests extends GroovyTestCase {
         assert auditLog.persistedObjectId == p.id as String
         assert auditLog.className == Tester.class.simpleName
         assert auditLog.propertyName == 'name'
-        assert auditLog.newValue == 'Maxi'
-        assert auditLog.oldValue == 'Andre'
+        assert auditLog.newValue == '"Maxi"'
+        assert auditLog.oldValue == '"Andre"'
 
         assert auditLog.dateCreated != null
 
@@ -109,7 +109,7 @@ class AuditLogIntegrationTests extends GroovyTestCase {
     void updateEventWithShortAuditType() {
         def p = new TestPerson3(name: "Andre", surName: "Steingress").save(flush: true)
 
-        p.name = 'Maxi'
+        p.name = '"Maxi"'
         p.surName = 'Mustermann'
         p.save(flush: true)
 

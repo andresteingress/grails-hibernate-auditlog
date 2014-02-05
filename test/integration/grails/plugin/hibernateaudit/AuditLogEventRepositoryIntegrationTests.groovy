@@ -28,14 +28,14 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
     void testInsertEventFull() {
         def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
 
-        def auditLogEvent = AuditLogEvent.findByClassName('Person')
+        def auditLogEvent = AuditLogEvent.findByClassName('Tester')
         assert auditLogEvent != null
 
         assert auditLogEvent.actor == 'system'
-        assert auditLogEvent.className == 'Person'
+        assert auditLogEvent.className == 'Tester'
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_INSERT
-        assert auditLogEvent.newValue == 'Andre'
+        assert auditLogEvent.newValue == '"Andre"'
         assert auditLogEvent.oldValue == null
         assert auditLogEvent.persistedObjectId == p.id as String
         assert auditLogEvent.propertyName == 'name'
@@ -47,14 +47,14 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
 
         def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
 
-        def auditLogEvent = AuditLogEvent.findByClassName('Person')
+        def auditLogEvent = AuditLogEvent.findByClassName('Tester')
         assert auditLogEvent != null
 
         assert auditLogEvent.actor == null
-        assert auditLogEvent.className == 'Person'
+        assert auditLogEvent.className == 'Tester'
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_INSERT
-        assert auditLogEvent.newValue == 'Andre'
+        assert auditLogEvent.newValue == '"Andre"'
         assert auditLogEvent.oldValue == null
         assert auditLogEvent.persistedObjectId == p.id as String
         assert auditLogEvent.propertyName == 'name'
@@ -66,12 +66,12 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
 
         def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
 
-        def auditLogEvent = AuditLogEvent.findByClassName('Person')
+        def auditLogEvent = AuditLogEvent.findByClassName('Tester')
         assert auditLogEvent != null
 
         assert auditLogEvent.actor == null
         assert auditLogEvent.persistedObjectId == p.id as String
-        assert auditLogEvent.className == 'Person'
+        assert auditLogEvent.className == 'Tester'
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_INSERT
         assert auditLogEvent.newValue == null
@@ -85,15 +85,15 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         p.name = 'Max'
         p.save(flush: true)
 
-        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Person', AuditLogEventRepository.EVENT_NAME_UPDATE)
+        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Tester', AuditLogEventRepository.EVENT_NAME_UPDATE)
         assert auditLogEvent != null
 
         assert auditLogEvent.actor == 'system'
-        assert auditLogEvent.className == 'Person'
+        assert auditLogEvent.className == 'Tester'
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_UPDATE
-        assert auditLogEvent.newValue == 'Max'
-        assert auditLogEvent.oldValue == 'Andre'
+        assert auditLogEvent.newValue == '"Max"'
+        assert auditLogEvent.oldValue == '"Andre"'
         assert auditLogEvent.persistedObjectId == p.id as String
         assert auditLogEvent.propertyName == 'name'
     }
@@ -106,15 +106,15 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         p.name = 'Max'
         p.save(flush: true)
 
-        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Person', AuditLogEventRepository.EVENT_NAME_UPDATE)
+        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Tester', AuditLogEventRepository.EVENT_NAME_UPDATE)
         assert auditLogEvent != null
 
         assert auditLogEvent.actor == null
-        assert auditLogEvent.className == 'Person'
+        assert auditLogEvent.className == 'Tester'
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_UPDATE
-        assert auditLogEvent.newValue == 'Max'
-        assert auditLogEvent.oldValue == 'Andre'
+        assert auditLogEvent.newValue == '"Max"'
+        assert auditLogEvent.oldValue == '"Andre"'
         assert auditLogEvent.persistedObjectId == p.id as String
         assert auditLogEvent.propertyName == 'name'
     }
@@ -127,11 +127,11 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         p.name = 'Max'
         p.save(flush: true)
 
-        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Person', AuditLogEventRepository.EVENT_NAME_UPDATE)
+        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Tester', AuditLogEventRepository.EVENT_NAME_UPDATE)
         assert auditLogEvent != null
 
         assert auditLogEvent.actor == null
-        assert auditLogEvent.className == 'Person'
+        assert auditLogEvent.className == 'Tester'
         assert auditLogEvent.persistedObjectId == p.id as String
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_UPDATE
@@ -151,14 +151,14 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         p.save(flush: true)
         p.delete(flush: true)
 
-        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Person', AuditLogEventRepository.EVENT_NAME_DELETE)
+        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Tester', AuditLogEventRepository.EVENT_NAME_DELETE)
         assert auditLogEvent != null
 
         assert auditLogEvent.actor == 'system'
-        assert auditLogEvent.className == 'Person'
+        assert auditLogEvent.className == 'Tester'
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_DELETE
-        assert auditLogEvent.newValue == 'Max'
+        assert auditLogEvent.newValue == '"Max"'
         assert auditLogEvent.oldValue == null
         assert auditLogEvent.persistedObjectId == p.id as String
         assert auditLogEvent.propertyName == 'name'
@@ -175,14 +175,14 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         p.save(flush: true)
         p.delete(flush: true)
 
-        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Person', AuditLogEventRepository.EVENT_NAME_DELETE)
+        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Tester', AuditLogEventRepository.EVENT_NAME_DELETE)
         assert auditLogEvent != null
 
         assert auditLogEvent.actor == null
-        assert auditLogEvent.className == 'Person'
+        assert auditLogEvent.className == 'Tester'
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_DELETE
-        assert auditLogEvent.newValue == 'Max'
+        assert auditLogEvent.newValue == '"Max"'
         assert auditLogEvent.oldValue == null
         assert auditLogEvent.persistedObjectId == p.id as String
         assert auditLogEvent.propertyName == 'name'
@@ -199,11 +199,11 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         p.save(flush: true)
         p.delete(flush: true)
 
-        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Person', AuditLogEventRepository.EVENT_NAME_DELETE)
+        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Tester', AuditLogEventRepository.EVENT_NAME_DELETE)
         assert auditLogEvent != null
 
         assert auditLogEvent.actor == null
-        assert auditLogEvent.className == 'Person'
+        assert auditLogEvent.className == 'Tester'
         assert auditLogEvent.persistedObjectId == p.id as String
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_DELETE

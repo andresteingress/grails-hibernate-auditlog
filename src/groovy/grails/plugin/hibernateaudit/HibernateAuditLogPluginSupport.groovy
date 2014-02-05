@@ -1,5 +1,6 @@
 package grails.plugin.hibernateaudit
 
+import grails.plugin.hibernateaudit.converters.AuditLogJsonConversionService
 import groovy.util.logging.Log4j
 
 /**

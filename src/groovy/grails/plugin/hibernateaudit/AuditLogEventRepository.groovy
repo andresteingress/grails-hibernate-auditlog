@@ -1,5 +1,7 @@
 package grails.plugin.hibernateaudit
 
+import grails.plugin.hibernateaudit.converters.AuditLogConversionService
+import grails.plugin.hibernateaudit.converters.AuditLogJsonConversionService
 import org.hibernate.StatelessSession
 
 /**
@@ -13,12 +15,14 @@ class AuditLogEventRepository {
 
     final AuditLogListener auditLogListener
     final AuditLogEventPreparation auditLogEventPreparation
+    final AuditLogConversionService auditLogConversionService
 
     protected AuditLogEventRepository(AuditLogListener listener)  {
         this.auditLogListener = listener
         this.auditLogEventPreparation = new AuditLogEventPreparation(auditLogListener)
-
+        this.auditLogConversionService = new AuditLogJsonConversionService()
     }
+
     def insert(AuditableDomainObject domain) {
         withStatelessSession { StatelessSession session ->
             def type = domain.insertAuditLogType()
@@ -92,8 +96,8 @@ class AuditLogEventRepository {
                 eventName: eventName,
                 persistedObjectId: domain.id?.toString() ?: "NA",
                 propertyName: key,
-                oldValue: oldValue,
-                newValue: value)
+                oldValue: auditLogConversionService.convert(oldValue),
+                newValue: auditLogConversionService.convert(value))
 
         if (!audit.validate()) throw new RuntimeException("Audit log event validation failed: ${audit.errors}")
 
@@ -108,8 +112,8 @@ class AuditLogEventRepository {
                 eventName: eventName,
                 persistedObjectId: domain.id?.toString() ?: "NA",
                 propertyName: key,
-                oldValue: oldValue,
-                newValue: value)
+                oldValue: auditLogConversionService.convert(oldValue),
+                newValue: auditLogConversionService.convert(value))
 
         if (!audit.validate()) throw new RuntimeException("Audit log event validation failed: ${audit.errors}")
 
