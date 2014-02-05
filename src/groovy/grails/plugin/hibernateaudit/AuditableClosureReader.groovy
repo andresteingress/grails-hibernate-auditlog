@@ -15,7 +15,7 @@ class AuditableClosureReader {
     // audit log type local config options
     static final String INSERT_AUDIT_LOG_TYPE = "insertAuditLogType"
     static final String UPDATE_AUDIT_LOG_TYPE = "updateAuditLogType"
-    static final string DELETE_AUDIT_LOG_TYPE = "deleteAuditLogType"
+    static final String DELETE_AUDIT_LOG_TYPE = "deleteAuditLogType"
 
     static boolean isAuditable(Class<?> cls)  {
         if (cls == null) return false
@@ -26,7 +26,6 @@ class AuditableClosureReader {
         def value = clazz.getPropertyValue(PROPERTY_NAME)
         return value == true || value instanceof Map
     }
-
 
     static AuditLogType insertAuditLogType(Class<?> cls, AuditLogType defaultValue = AuditLogType.FULL)  {
         return auditLogType(cls, INSERT_AUDIT_LOG_TYPE, defaultValue)
@@ -44,7 +43,7 @@ class AuditableClosureReader {
         def auditableMap = getAuditableMapIfAvailable(cls) 
         if (!auditableMap) return defaultValue
  
-        return auditableMap[key] ?: defaultValue
+        return (auditableMap[key] ?: defaultValue) as AuditLogType
     }
 
     static List<String> excludeList(Class<?> cls, List<String> defaultValues = []) {
