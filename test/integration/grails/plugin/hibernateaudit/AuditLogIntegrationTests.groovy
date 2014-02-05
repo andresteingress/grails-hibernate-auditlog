@@ -23,15 +23,15 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
     @Test
     void insertEvent() {
-        def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
 
-        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassName(p.id as String, Person.class.simpleName)
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassName(p.id as String, Tester.class.simpleName)
         assert auditLog
 
         assert auditLog.eventName == 'INSERT'
 
         assert auditLog.persistedObjectId == p.id as String
-        assert auditLog.className == Person.class.simpleName
+        assert auditLog.className == Tester.class.simpleName
         assert auditLog.propertyName == 'name'
 
         assert auditLog.dateCreated != null
@@ -42,7 +42,7 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
     @Test
     void updateEvent() {
-        def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
 
         p.name = 'Maxi'
         p.surName = 'Mustermann'
@@ -50,13 +50,13 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
         assert ['INSERT', 'UPDATE'] == AuditLogEvent.list(order: 'asc', sort: 'id')*.eventName
 
-        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassNameAndEventName(p.id as String, Person.class.simpleName, "UPDATE")
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassNameAndEventName(p.id as String, Tester.class.simpleName, "UPDATE")
         assert auditLog
 
         assert auditLog.eventName == 'UPDATE'
 
         assert auditLog.persistedObjectId == p.id as String
-        assert auditLog.className == Person.class.simpleName
+        assert auditLog.className == Tester.class.simpleName
         assert auditLog.propertyName == 'name'
         assert auditLog.newValue == 'Maxi'
         assert auditLog.oldValue == 'Andre'

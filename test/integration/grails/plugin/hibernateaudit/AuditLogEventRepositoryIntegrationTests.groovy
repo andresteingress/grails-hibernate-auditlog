@@ -26,7 +26,7 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
 
     @Test
     void testInsertEventFull() {
-        def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
 
         def auditLogEvent = AuditLogEvent.findByClassName('Person')
         assert auditLogEvent != null
@@ -45,7 +45,7 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
     void testInsertEventMedium() {
         auditLogListener.defaultInsertAuditLogType = AuditLogType.MEDIUM
 
-        def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
 
         def auditLogEvent = AuditLogEvent.findByClassName('Person')
         assert auditLogEvent != null
@@ -64,7 +64,7 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
     void testInsertEventShort() {
         auditLogListener.defaultInsertAuditLogType = AuditLogType.SHORT
 
-        def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
 
         def auditLogEvent = AuditLogEvent.findByClassName('Person')
         assert auditLogEvent != null
@@ -81,7 +81,7 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
 
     @Test
     void testUpdateEventFull() {
-        def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
         p.name = 'Max'
         p.save(flush: true)
 
@@ -102,7 +102,7 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
     void testUpdateEventMedium() {
         auditLogListener.defaultUpdateAuditLogType = AuditLogType.MEDIUM
 
-        def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
         p.name = 'Max'
         p.save(flush: true)
 
@@ -123,7 +123,7 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
     void testUpdateEventShort() {
         auditLogListener.defaultUpdateAuditLogType = AuditLogType.SHORT
 
-        def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
         p.name = 'Max'
         p.save(flush: true)
 
@@ -146,7 +146,7 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         auditLogListener.defaultUpdateAuditLogType = AuditLogType.NONE
         auditLogListener.defaultDeleteAuditLogType = AuditLogType.FULL
 
-        def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
         p.name = 'Max'
         p.save(flush: true)
         p.delete(flush: true)
@@ -170,7 +170,7 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         auditLogListener.defaultUpdateAuditLogType = AuditLogType.NONE
         auditLogListener.defaultDeleteAuditLogType = AuditLogType.MEDIUM
 
-        def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
         p.name = 'Max'
         p.save(flush: true)
         p.delete(flush: true)
@@ -194,7 +194,7 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         auditLogListener.defaultUpdateAuditLogType = AuditLogType.NONE
         auditLogListener.defaultDeleteAuditLogType = AuditLogType.SHORT
 
-        def p = new Person(name: "Andre", surName: "Steingress").save(flush: true)
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
         p.name = 'Max'
         p.save(flush: true)
         p.delete(flush: true)

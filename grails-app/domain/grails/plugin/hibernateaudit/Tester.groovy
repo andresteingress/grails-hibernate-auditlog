@@ -1,6 +1,6 @@
 package grails.plugin.hibernateaudit
 
-class Person {
+class Tester {
 
     static auditable = true
 

@@ -19,7 +19,7 @@ class AuditDomainTests extends GroovyTestCase {
 
     @Test
     void createDomain() {
-        def p = new Person(name: "Andre", surName: "Steingress").save()
+        def p = new Tester(name: "Andre", surName: "Steingress").save()
         def auditDomain = new AuditableDomainObject(auditLogListener, p)
 
         assert auditDomain.logListener != null

@@ -23,13 +23,13 @@ class AuditLogRollbackIntegrationTests extends GroovyTestCase {
     @Test
     void insertEventWithRollback() {
         try {
-            Person.withTransaction { TransactionStatus status ->
-                new Person(name: "Andre", surName: "Steingress").save(flush: true)
+            Tester.withTransaction { TransactionStatus status ->
+                new Tester(name: "Andre", surName: "Steingress").save(flush: true)
                 throw new RuntimeException('some exception ...')
             }
         } catch (e) {}
 
-        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassName("1", Person.class.simpleName)
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassName("1", Tester.class.simpleName)
         assert auditLog == null
 
     }
