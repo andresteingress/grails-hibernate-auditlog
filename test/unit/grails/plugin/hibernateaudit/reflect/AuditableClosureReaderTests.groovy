@@ -1,5 +1,8 @@
-package grails.plugin.hibernateaudit
+package grails.plugin.hibernateaudit.reflect
 
+import grails.plugin.hibernateaudit.domain.AuditLogType
+import grails.plugin.hibernateaudit.TestPerson
+import grails.plugin.hibernateaudit.TestPerson2
 import org.junit.Test
 
 class AuditableClosureReaderTests {

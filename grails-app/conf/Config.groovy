@@ -1,4 +1,4 @@
-import grails.plugin.hibernateaudit.AuditLogType
+import grails.plugin.hibernateaudit.domain.AuditLogType
 
 // All audit log configuration variables
 auditLog.disabled = false        // globally disable audit logging

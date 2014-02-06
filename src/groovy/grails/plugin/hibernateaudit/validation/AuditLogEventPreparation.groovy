@@ -1,4 +1,7 @@
-package grails.plugin.hibernateaudit
+package grails.plugin.hibernateaudit.validation
+
+import grails.plugin.hibernateaudit.AuditLogEvent
+import grails.plugin.hibernateaudit.AuditLogListener
 
 /**
  * Prepare the audit log event right before it is stored in the DB.

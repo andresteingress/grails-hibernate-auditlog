@@ -1,4 +1,4 @@
-package grails.plugin.hibernateaudit
+package grails.plugin.hibernateaudit.domain
 
 /**
  * An enumeration of various audit log types. An audit log type

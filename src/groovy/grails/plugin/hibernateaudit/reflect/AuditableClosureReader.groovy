@@ -1,5 +1,6 @@
-package grails.plugin.hibernateaudit
+package grails.plugin.hibernateaudit.reflect
 
+import grails.plugin.hibernateaudit.domain.AuditLogType
 import org.grails.datastore.mapping.reflect.ClassPropertyFetcher
 
 /**

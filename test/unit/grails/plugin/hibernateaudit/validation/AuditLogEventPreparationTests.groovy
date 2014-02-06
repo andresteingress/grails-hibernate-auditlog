@@ -1,5 +1,8 @@
-package grails.plugin.hibernateaudit
+package grails.plugin.hibernateaudit.validation
 
+import grails.plugin.hibernateaudit.AuditLogEvent
+import grails.plugin.hibernateaudit.AuditLogListener
+import grails.plugin.hibernateaudit.validation.AuditLogEventPreparation
 import org.junit.Test
 
 class AuditLogEventPreparationTests {

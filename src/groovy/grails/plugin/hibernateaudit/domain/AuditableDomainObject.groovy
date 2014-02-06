@@ -1,5 +1,7 @@
-package grails.plugin.hibernateaudit
+package grails.plugin.hibernateaudit.domain
 
+import grails.plugin.hibernateaudit.AuditLogListener
+import grails.plugin.hibernateaudit.reflect.AuditableClosureReader
 import grails.util.Holders
 import groovy.util.logging.Log4j
 import org.codehaus.groovy.grails.commons.GrailsDomainClass

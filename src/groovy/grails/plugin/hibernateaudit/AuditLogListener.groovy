@@ -1,5 +1,7 @@
 package grails.plugin.hibernateaudit
 
+import grails.plugin.hibernateaudit.domain.AuditLogType
+import grails.plugin.hibernateaudit.reflect.AuditableClosureReader
 import groovy.util.logging.Log4j
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.grails.datastore.mapping.core.Datastore

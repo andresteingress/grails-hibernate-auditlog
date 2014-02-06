@@ -1,5 +1,7 @@
 package grails.plugin.hibernateaudit
 
+import grails.plugin.hibernateaudit.domain.AuditLogType
+
 class TestPerson3 {
 
     static auditable = [

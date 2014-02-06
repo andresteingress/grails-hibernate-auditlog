@@ -1,5 +1,8 @@
-package grails.plugin.hibernateaudit
+package grails.plugin.hibernateaudit.domain
 
+import grails.plugin.hibernateaudit.AuditLogListener
+import grails.plugin.hibernateaudit.Tester
+import grails.plugin.hibernateaudit.domain.AuditableDomainObject
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
 import org.junit.Before

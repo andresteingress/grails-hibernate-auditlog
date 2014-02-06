@@ -1,7 +1,9 @@
 package grails.plugin.hibernateaudit
 
 import grails.plugin.hibernateaudit.converters.AuditLogConversionService
-import grails.plugin.hibernateaudit.converters.AuditLogJsonConversionService
+import grails.plugin.hibernateaudit.domain.AuditLogType
+import grails.plugin.hibernateaudit.domain.AuditableDomainObject
+import grails.plugin.hibernateaudit.validation.AuditLogEventPreparation
 import org.hibernate.StatelessSession
 
 /**

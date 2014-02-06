@@ -1,5 +1,6 @@
 package grails.plugin.hibernateaudit
 
+import grails.plugin.hibernateaudit.domain.AuditLogType
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
 import org.junit.Before
