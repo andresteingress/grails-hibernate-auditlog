@@ -8,17 +8,12 @@ import groovy.util.logging.Log4j
 @Log4j
 class AuditLogEventActions {
 
-    final AuditLogListener auditLogListener
-    final AuditLogEventRepository auditEventLogRepository
-
-    protected AuditLogEventActions(AuditLogListener listener)  {
-        this.auditLogListener = listener
-        this.auditEventLogRepository = new AuditLogEventRepository(auditLogListener)
-    }
+    AuditLogListener auditLogListener
+    AuditLogEventRepository auditLogEventRepository
 
     void onInsert(def domain)  {
         try {
-            auditEventLogRepository.insert(new AuditableDomainObject(auditLogListener, domain))
+            auditLogEventRepository.insert(new AuditableDomainObject(auditLogListener, domain))
         }
         catch (e) {
             log.error "Audit plugin unable to process insert event for ${domain.class.name}", e
@@ -30,7 +25,7 @@ class AuditLogEventActions {
             def dirtyProperties = domain.dirtyPropertyNames
             if (!dirtyProperties) return
 
-            auditEventLogRepository.update(new AuditableDomainObject(auditLogListener, domain))
+            auditLogEventRepository.update(new AuditableDomainObject(auditLogListener, domain))
         }
         catch (e) {
             log.error "Audit plugin unable to process update event for ${domain.class.name}", e
@@ -39,7 +34,7 @@ class AuditLogEventActions {
 
     void onBeforeDelete(def domain)  {
         try {
-            auditEventLogRepository.delete(new AuditableDomainObject(auditLogListener, domain))
+            auditLogEventRepository.delete(new AuditableDomainObject(auditLogListener, domain))
         }
         catch (e) {
             log.error "Audit plugin unable to process delete event for ${domain.class.name}", e

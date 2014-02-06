@@ -27,6 +27,26 @@ class HibernateAuditLogPluginSupport {
                 truncateLength = application.config.auditLog.truncateLength ?: AuditLogEvent.MAX_SIZE
                 // actorClosure = application.config.auditLog.actorClosure
                 defaultExcludeList = application.config.auditLog.defaultExclude?.asImmutable() ?: ['version', 'lastUpdated'].asImmutable()
+
+                auditLogEventActions = ref('auditLogEventActions')
+            }
+
+            auditLogEventPreparation(AuditLogEventPreparation)  {
+                auditLogListener = ref('auditLogListener')
+            }
+
+            // might be overridden by applications by using AuditLogSimpleStringConversionService
+            auditLogConversionService(AuditLogJsonConversionService)
+
+            auditLogEventRepository(AuditLogEventRepository) {
+                auditLogListener = ref('auditLogListener')
+                auditLogEventPreparation = ref('auditLogEventPreparation')
+                auditLogConversionService = ref('auditLogConversionService')
+            }
+
+            auditLogEventActions(AuditLogEventActions)  {
+                auditLogListener = ref('auditLogListener')
+                auditLogEventRepository = ref('auditLogEventRepository')
             }
         }
     }

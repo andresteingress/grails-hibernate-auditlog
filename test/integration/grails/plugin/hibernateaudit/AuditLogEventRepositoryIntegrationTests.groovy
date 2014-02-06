@@ -20,8 +20,6 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         auditLogListener.defaultDeleteAuditLogType = AuditLogType.FULL
 
         auditLogListener.actorClosure = { GrailsWebRequest request, GrailsHttpSession session -> "system" }
-
-        auditEventLogRepository = new AuditLogEventRepository(auditLogListener)
     }
 
     @Test

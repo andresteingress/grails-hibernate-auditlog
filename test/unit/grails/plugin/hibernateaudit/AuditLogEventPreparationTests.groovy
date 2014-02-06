@@ -10,7 +10,9 @@ class AuditLogEventPreparationTests {
         def listener = new AuditLogListener(null)
         listener.truncateLength = 10
 
-        def preparation = new AuditLogEventPreparation(listener)
+        def preparation = new AuditLogEventPreparation()
+        preparation.auditLogListener = listener
+
         def auditLogEvent = new AuditLogEvent(newValue: "0123456789a")
 
         assert preparation.prepare(auditLogEvent).dateCreated != null
@@ -22,7 +24,8 @@ class AuditLogEventPreparationTests {
         def listener = new AuditLogListener(null)
         listener.truncateLength = 10
 
-        def preparation = new AuditLogEventPreparation(listener)
+        def preparation = new AuditLogEventPreparation()
+        preparation.auditLogListener = listener
         def auditLogEvent = new AuditLogEvent(newValue: "0123456789a")
 
         assert preparation.prepare(auditLogEvent).newValue == "0123456789"
@@ -34,7 +37,9 @@ class AuditLogEventPreparationTests {
         def listener = new AuditLogListener(null)
         listener.truncateLength = 10
 
-        def preparation = new AuditLogEventPreparation(listener)
+        def preparation = new AuditLogEventPreparation()
+        preparation.auditLogListener = listener
+
         def auditLogEvent = new AuditLogEvent(oldValue: "0123456789a")
 
         assert preparation.prepare(auditLogEvent).oldValue == "0123456789"

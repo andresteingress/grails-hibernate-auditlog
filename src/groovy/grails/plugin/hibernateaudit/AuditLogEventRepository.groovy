@@ -13,15 +13,9 @@ class AuditLogEventRepository {
     static final String EVENT_NAME_UPDATE = "UPDATE"
     static final String EVENT_NAME_DELETE = "DELETE"
 
-    final AuditLogListener auditLogListener
-    final AuditLogEventPreparation auditLogEventPreparation
-    final AuditLogConversionService auditLogConversionService
-
-    protected AuditLogEventRepository(AuditLogListener listener)  {
-        this.auditLogListener = listener
-        this.auditLogEventPreparation = new AuditLogEventPreparation(auditLogListener)
-        this.auditLogConversionService = new AuditLogJsonConversionService()
-    }
+    AuditLogListener auditLogListener
+    AuditLogEventPreparation auditLogEventPreparation
+    AuditLogConversionService auditLogConversionService
 
     def insert(AuditableDomainObject domain) {
         withStatelessSession { StatelessSession session ->

@@ -5,11 +5,7 @@ package grails.plugin.hibernateaudit
  */
 class AuditLogEventPreparation {
 
-    final AuditLogListener auditLogListener
-
-    protected AuditLogEventPreparation(AuditLogListener listener)  {
-        this.auditLogListener = listener
-    }
+    AuditLogListener auditLogListener
 
     AuditLogEvent prepare(AuditLogEvent auditLogEvent)  {
         auditLogEvent.dateCreated = new Date()

@@ -32,11 +32,10 @@ class AuditLogListener extends AbstractPersistenceEventListener {
 
     SessionFactory sessionFactory
 
-    final AuditLogEventActions auditClosureActions
+    AuditLogEventActions auditLogEventActions
 
     AuditLogListener(Datastore datastore) {
         super(datastore)
-        this.auditClosureActions = new AuditLogEventActions(this)
     }
 
     @Override
@@ -101,16 +100,16 @@ class AuditLogListener extends AbstractPersistenceEventListener {
 
     protected void onPreDelete(PreDeleteEvent event) {
         def domain = event.entityObject
-        auditClosureActions.onBeforeDelete(domain)
+        auditLogEventActions.onBeforeDelete(domain)
     }
 
     protected void onPostInsert(PostInsertEvent event) {
         def domain = event.entityObject
-        auditClosureActions.onInsert(domain)
+        auditLogEventActions.onInsert(domain)
     }
 
     protected void onPreUpdate(PreUpdateEvent event) {
         def domain = event.entityObject
-        auditClosureActions.onBeforeUpdate(domain)
+        auditLogEventActions.onBeforeUpdate(domain)
     }
 }
