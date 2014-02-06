@@ -25,13 +25,14 @@ class AuditableDomainObject {
         this.properties = domainClass.persistentProperties*.name
     }
 
-    private Collection<String> filterProperties(Collection<String> properties, domain) {
+    protected Collection<String> filterProperties(Collection<String> properties, domain) {
         // remove all excluded properties
         properties.removeAll(AuditableClosureReader.excludeList(domain.class, logListener.defaultExcludeList))
 
-        if (logListener.defaultIncludeList)  {
+        def includeList = AuditableClosureReader.includeList(domain.class, logListener.defaultIncludeList ?: [])
+        if (includeList)  {
             // intersect with included properties
-            properties = properties.intersect(AuditableClosureReader.includeList(domain.class, logListener.defaultIncludeList))
+            properties = properties.intersect(includeList)
         }
 
         properties

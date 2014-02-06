@@ -1,6 +1,7 @@
 package grails.plugin.hibernateaudit.domain
 
 import grails.plugin.hibernateaudit.AuditLogListener
+import grails.plugin.hibernateaudit.TestPerson3
 import grails.plugin.hibernateaudit.Tester
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
@@ -28,6 +29,18 @@ class AuditDomainTests extends GroovyTestCase {
         assert auditDomain.className == 'Tester'
         assert auditDomain.id == p.id
         assert auditDomain.domainClass != null
+        assert auditDomain.toMap() == [name: "Andre"]
+    }
+
+    @Test
+    void intersectIncludeProperties() {
+
+        auditLogListener.defaultIncludeList = []
+        auditLogListener.defaultExcludeList = []
+
+        def p = new TestPerson3(name: "Andre", surName: "Steingress").save()
+        def auditDomain = new AuditableDomainObject(auditLogListener, p)
+
         assert auditDomain.toMap() == [name: "Andre"]
     }
 }
