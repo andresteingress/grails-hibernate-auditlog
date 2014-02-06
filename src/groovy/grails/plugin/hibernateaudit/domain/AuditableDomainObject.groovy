@@ -16,13 +16,15 @@ class AuditableDomainObject {
     final def domain
     final GrailsDomainClass domainClass
 
-    final Collection<String> properties
+    final Collection<String> simpleProperties
+    final Collection<String> oneToOneProperties
 
     protected AuditableDomainObject(AuditLogListener logListener, def domain)  {
         this.logListener = logListener
         this.domain = domain
         this.domainClass = Holders.grailsApplication.getDomainClass(domain.class.name) as GrailsDomainClass
-        this.properties = domainClass.persistentProperties.findAll { !it.association || it.oneToOne }*.name
+        this.simpleProperties = domainClass.persistentProperties.findAll { !it.association }*.name
+        this.oneToOneProperties = domainClass.persistentProperties.findAll { it.oneToOne }*.name
     }
 
     protected Collection<String> filterProperties(Collection<String> properties, domain) {
@@ -39,15 +41,19 @@ class AuditableDomainObject {
     }
 
     Map<String, Object> toMap() {
-        toMap(properties)
+        toMap(simpleProperties)
     }
 
-    Map<String, Object> toMap(Collection<String> propertyNames) {
-        filterProperties(propertyNames, domain).collectEntries { [it, domain."$it"] }
+    Map<String, Object> toDirtyPropertiesMap() {
+        toMap(dirtyPropertyNames)
     }
 
     Map<String, Object> toPersistentValueMap(Collection<String> propertyNames) {
         filterProperties(propertyNames, domain).collectEntries { [it, domain.getPersistentValue(it)] }
+    }
+
+    protected Map<String, Object> toMap(Collection<String> propertyNames) {
+        filterProperties(propertyNames, domain).collectEntries { [it, domain."$it"] }
     }
 
     def getId() {

@@ -10,7 +10,7 @@ import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
 import org.junit.Before
 import org.junit.Test
 
-class AuditDomainTests extends GroovyTestCase {
+class AuditableDomainObjectTests extends GroovyTestCase {
 
     AuditLogListener auditLogListener
 
@@ -47,7 +47,7 @@ class AuditDomainTests extends GroovyTestCase {
     }
 
     @Test
-    void fetchOneToOneProperties() {
+    void oneToOneProperties() {
 
         auditLogListener.defaultIncludeList = []
         auditLogListener.defaultExcludeList = []
@@ -55,20 +55,6 @@ class AuditDomainTests extends GroovyTestCase {
         def p = new TestPerson4().save()
         def auditDomain = new AuditableDomainObject(auditLogListener, p)
 
-        assert auditDomain.properties == ['testPerson5']
-    }
-
-    @Test
-    void dirtyPropertiesForOneToOneProperties() {
-
-        auditLogListener.defaultIncludeList = []
-        auditLogListener.defaultExcludeList = []
-
-        def p = new TestPerson4().save(flush: true)
-        def p2 = new TestPerson5(name: 'Max', surName: 'Mustermann').save(flush: true)
-
-        p.testPerson5 = p2
-        def auditDomain = new AuditableDomainObject(auditLogListener, p)
-        assert auditDomain.dirtyPropertyNames == ['testPerson5']
+        assert auditDomain.oneToOneProperties == ['testPerson5']
     }
 }

@@ -46,7 +46,7 @@ class AuditLogEventRepository {
 
         withStatelessSession { StatelessSession session ->
             if (type in [AuditLogType.FULL, AuditLogType.MEDIUM])  {
-                Map newMap = domain.toMap(dirtyProperties)
+                Map newMap = domain.toDirtyPropertiesMap()
                 Map oldMap = domain.toPersistentValueMap(dirtyProperties)
 
                 newMap.each { String key, def value ->
