@@ -5,7 +5,7 @@ import grails.plugin.hibernateaudit.HibernateAuditLogPluginSupport
  */
 class HibernateAuditLogGrailsPlugin {
 
-    def version = "0.7-SNAPSHOT"
+    def version = "0.8-SNAPSHOT"
     def grailsVersion = "2.1 > *"
 
     // resources that are excluded from plugin packaging
