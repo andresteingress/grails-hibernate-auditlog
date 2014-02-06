@@ -42,6 +42,16 @@ class AuditLogIntegrationTests extends GroovyTestCase {
     }
 
     @Test
+    void insertDisabledEvent() {
+        auditLogListener.defaultInsertAuditLogType = AuditLogType.NONE
+
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
+
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassName(p.id as String, Tester.class.simpleName)
+        assert auditLog == null
+    }
+
+    @Test
     void updateEvent() {
         def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
 
