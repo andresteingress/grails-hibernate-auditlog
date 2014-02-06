@@ -22,7 +22,7 @@ class AuditableDomainObject {
         this.logListener = logListener
         this.domain = domain
         this.domainClass = Holders.grailsApplication.getDomainClass(domain.class.name) as GrailsDomainClass
-        this.properties = domainClass.persistentProperties*.name
+        this.properties = domainClass.persistentProperties.findAll { !it.association || it.oneToOne }*.name
     }
 
     protected Collection<String> filterProperties(Collection<String> properties, domain) {

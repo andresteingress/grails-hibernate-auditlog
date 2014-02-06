@@ -140,4 +140,20 @@ class AuditLogIntegrationTests extends GroovyTestCase {
         assert auditLog.newValue == null
         assert auditLog.oldValue == null
     }
+
+    @Test
+    void updateEventWithOneToOneRelationship() {
+        auditLogListener.defaultInsertAuditLogType = AuditLogType.SHORT
+
+        def parent = new TestPerson4().save(flush: true)
+        def child  = new TestPerson5(name: "Max", surName: "Mustermann").save(flush: true)
+
+        parent.testPerson5 = child
+        parent.save(flush: true)
+
+        assert ['INSERT', 'INSERT', 'UPDATE'] == AuditLogEvent.list(order: 'asc', sort: 'id')*.eventName
+
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassNameAndEventName(p.id as String, Tester.class.simpleName, "UPDATE")
+        assert auditLog
+    }
 }
