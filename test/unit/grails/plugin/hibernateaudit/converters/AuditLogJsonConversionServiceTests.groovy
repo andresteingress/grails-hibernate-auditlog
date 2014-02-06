@@ -24,4 +24,12 @@ class AuditLogJsonConversionServiceTests {
         def s = "Max"
         assert '"Max"' == auditLogJsonConversionService.convert(s)
     }
+
+    enum TestEnum { ONE, TWO, THREE }
+
+    @Test
+    void enumerationValueToString() {
+        def test = TestEnum.TWO
+        assert '"TWO"' == auditLogJsonConversionService.convert(test)
+    }
 }
