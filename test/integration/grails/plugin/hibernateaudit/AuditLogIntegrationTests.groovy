@@ -142,7 +142,7 @@ class AuditLogIntegrationTests extends GroovyTestCase {
         assert auditLog.oldValue == null
     }
 
-    @Ignore @Test
+    @Test
     void updateEventWithOneToOneRelationship() {
         auditLogListener.defaultIncludeList = []
         auditLogListener.defaultInsertAuditLogType = AuditLogType.SHORT
@@ -155,7 +155,30 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
         assert ['INSERT', 'INSERT', 'UPDATE'] == AuditLogEvent.list(order: 'asc', sort: 'id')*.eventName
 
-        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassNameAndEventName(p.id as String, Tester.class.simpleName, "UPDATE")
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndPropertyName(parent.id as String, "testPerson5")
         assert auditLog
+        assert auditLog.newValue == child.id as String
+    }
+
+    @Test
+    void oneToOneChangingBackAndForth() {
+        auditLogListener.defaultIncludeList = []
+        auditLogListener.defaultInsertAuditLogType = AuditLogType.SHORT
+
+        def parent = new TestPerson4().save(flush: true)
+        def child  = new TestPerson5(name: "Max", surName: "Mustermann").save(flush: true)
+
+        parent.testPerson5 = child
+        parent.save(flush: true)
+        
+        parent.testPerson5 = null
+        parent.save(flush: true)
+
+        def logs = AuditLogEvent.findAllByPersistedObjectIdAndPropertyName(parent.id as String, 'testPerson5')
+        assert logs
+        assert logs.size() == 2
+
+        assert logs[0].newValue == child.id as String
+        assert logs[1].newValue == null
     }
 }

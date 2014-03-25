@@ -1,4 +1,5 @@
 package grails.plugin.hibernateaudit.converters
+
 /**
  * Converts data types to their String representation. This default implementation converts the given
  * object into its String representation.
@@ -6,8 +7,13 @@ package grails.plugin.hibernateaudit.converters
 class AuditLogSimpleStringConversionService implements AuditLogConversionService {
 
     String convert(def object)  {
-        if (object == null) return null
+        def value = object
 
-        object as String
+        if (value == null) return null
+        if (value.hasProperty('id'))  {
+            value = value.id
+        }
+
+        value as String
     }
 }
