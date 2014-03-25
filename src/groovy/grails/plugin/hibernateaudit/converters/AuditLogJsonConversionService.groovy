@@ -25,6 +25,15 @@ class AuditLogJsonConversionService implements AuditLogConversionService {
             value = value.id
         }
 
+        if (value instanceof Collection)  {
+            if (value.isEmpty()) return value
+
+            def firstObject = value.first()
+            if (firstObject.hasProperty('id'))  {
+                value = value*.id.sort()
+            }
+        }
+
         return value
     }
 }

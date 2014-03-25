@@ -181,4 +181,48 @@ class AuditLogIntegrationTests extends GroovyTestCase {
         assert logs[0].newValue == child.id as String
         assert logs[1].newValue == null
     }
+
+    @Test
+    void updateEventWithManyToOneRelationship() {
+        auditLogListener.defaultIncludeList = []
+        auditLogListener.defaultInsertAuditLogType = AuditLogType.SHORT
+
+        def parent = new TestPerson6().save(flush: true)
+        def child1  = new TestPerson5(name: "Max", surName: "Mustermann").save(flush: true)
+        def child2  = new TestPerson5(name: "Erika", surName: "Mustermann").save(flush: true)
+
+        parent.addToTestPerson5(child1)
+        parent.addToTestPerson5(child2)
+        parent.save(flush: true)
+
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndPropertyName(parent.id as String, "testPerson5")
+        assert auditLog
+        assert auditLog.newValue == "[${child1.id},${child2.id}]"
+    }
+
+    @Ignore
+    @Test
+    void addElementsToManyToOneRelationship() {
+        auditLogListener.defaultIncludeList = []
+        auditLogListener.defaultInsertAuditLogType = AuditLogType.SHORT
+
+        def parent = new TestPerson6().save(flush: true)
+        def child1  = new TestPerson5(name: "Max", surName: "Mustermann").save(flush: true)
+
+        parent.addToTestPerson5(child1)
+
+        parent.save(flush: true)
+
+        def auditLog = AuditLogEvent.findAllByPersistedObjectIdAndPropertyName(parent.id as String, "testPerson5").first()
+        assert auditLog
+        assert auditLog.newValue == "[${child1.id}]"
+
+        def child2  = new TestPerson5(name: "Erika", surName: "Mustermann").save(flush: true)
+        parent.addToTestPerson5(child2)
+        parent.save(flush: true)
+
+        auditLog = AuditLogEvent.findAllByPersistedObjectIdAndPropertyName(parent.id as String, "testPerson5")[1]
+        assert auditLog
+        assert auditLog.newValue == "[${child1.id}, ${child2.id}]"
+    }
 }
