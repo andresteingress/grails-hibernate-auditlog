@@ -8,14 +8,23 @@ import groovy.json.JsonOutput
  */
 class AuditLogJsonConversionService implements AuditLogConversionService {
 
+    @Override
     String convert(def object)  {
         def value = object
-
         if (value == null) return null
+
+        JsonOutput.toJson(prepare(value))
+    }
+
+    @Override
+    Object prepare(object) {
+        def value = object
+        if (value == null) return null
+
         if (value.hasProperty('id'))  {
             value = value.id
         }
 
-        JsonOutput.toJson(value)
+        return value
     }
 }

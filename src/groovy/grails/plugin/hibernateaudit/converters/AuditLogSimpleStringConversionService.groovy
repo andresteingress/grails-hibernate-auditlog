@@ -8,12 +8,20 @@ class AuditLogSimpleStringConversionService implements AuditLogConversionService
 
     String convert(def object)  {
         def value = object
-
         if (value == null) return null
+
+        prepare(value)
+    }
+
+    @Override
+    Object prepare(object) {
+        def value = object
+        if (value == null) return null
+
         if (value.hasProperty('id'))  {
             value = value.id
         }
 
-        value as String
+        return value
     }
 }

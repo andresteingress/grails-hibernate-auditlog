@@ -8,5 +8,8 @@ import org.springframework.stereotype.Service
  */
 @Service
 public interface AuditLogConversionService {
+
     String convert(def object)
+
+    Object prepare(def object)
 }
