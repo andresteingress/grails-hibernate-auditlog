@@ -8,8 +8,6 @@ enum AuditLogType {
 
     SHORT,  // log only domain id + domain class + date created
 
-    MEDIUM, // log including property values changes without actor and URI
-
     FULL,   // log everything including property changes, actor and URI
 
     NONE    // log disabled

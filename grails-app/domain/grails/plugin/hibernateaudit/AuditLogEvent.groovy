@@ -20,10 +20,8 @@ class AuditLogEvent implements Serializable {
     String className
     String persistedObjectId
 
-    // property name and values
-    String propertyName
-    String oldValue
-    String newValue
+    // serialized object state
+    String value
 
     static constraints = {
         actor(nullable: true)
@@ -31,14 +29,13 @@ class AuditLogEvent implements Serializable {
         className(nullable: true)
         persistedObjectId(nullable: true)
         eventName(nullable: true)
-        propertyName(nullable: true)
 
-        oldValue(nullable: true, maxSize: MAX_SIZE)
-        newValue(nullable: true, maxSize: MAX_SIZE)
+        value(nullable: true, maxSize: MAX_SIZE)
     }
 
     static mapping = {
         table Holders.config.auditLog.tablename ?: 'audit_log'
+        value type: 'text'
         version false
     }
 
@@ -67,9 +64,7 @@ class AuditLogEvent implements Serializable {
                 persistedObjectId: persistedObjectId,
 
                 eventName: eventName,
-                propertyName: propertyName,
-                oldValue: oldValue,
-                newValue: newValue,
+                value: value
         ]
         out.writeObject(map)
     }

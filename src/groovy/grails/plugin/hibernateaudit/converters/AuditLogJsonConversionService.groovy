@@ -9,7 +9,7 @@ import groovy.json.JsonOutput
 class AuditLogJsonConversionService implements AuditLogConversionService {
 
     @Override
-    String convert(def object)  {
+    String convert(Map<String, Object> object)  {
         def value = object
         if (value == null) return null
 
@@ -17,23 +17,22 @@ class AuditLogJsonConversionService implements AuditLogConversionService {
     }
 
     @Override
-    Object prepare(object) {
-        def value = object
-        if (value == null) return null
-
-        if (value.hasProperty('id'))  {
-            value = value.id
-        }
-
-        if (value instanceof Collection)  {
-            if (value.isEmpty()) return value
-
-            def firstObject = value.first()
-            if (firstObject.hasProperty('id'))  {
-                value = value*.id.sort()
+    Object prepare(Map<String, Object> object) {
+        return object.collectEntries { key, val ->
+            if (val.hasProperty('id'))  {
+                val = val.id
             }
-        }
 
-        return value
+            if (val instanceof Collection)  {
+                if (val.isEmpty()) return val
+
+                def firstObject = val.first()
+                if (firstObject.hasProperty('id'))  {
+                    val = val*.id.sort()
+                }
+            }
+
+            [key, val]
+        }
     }
 }

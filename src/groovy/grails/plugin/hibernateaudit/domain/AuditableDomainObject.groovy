@@ -28,6 +28,9 @@ class AuditableDomainObject {
     }
 
     protected Collection<String> filterProperties(Collection<String> properties, domain) {
+        // remove the version information
+        properties.remove("version")
+
         // remove all excluded properties
         properties.removeAll(AuditableClosureReader.excludeList(domain.class, logListener.defaultExcludeList))
 

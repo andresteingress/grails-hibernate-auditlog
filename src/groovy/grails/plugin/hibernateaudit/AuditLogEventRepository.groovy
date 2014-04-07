@@ -24,11 +24,9 @@ class AuditLogEventRepository {
         if (type == AuditLogType.NONE) return
 
         withStatelessSession { StatelessSession session ->
-            if (type in [AuditLogType.FULL, AuditLogType.MEDIUM])  {
+            if (type == AuditLogType.FULL)  {
                 def map = domain.toMap()
-                map.each { key, value ->
-                    this."saveAuditLogEvent${type.toString()}"(session, EVENT_NAME_INSERT, domain, key, value)
-                }
+                saveAuditLogEventFULL(session, EVENT_NAME_INSERT, domain, auditLogConversionService.convert(map))
             }
 
             if (type == AuditLogType.SHORT)  {
@@ -45,16 +43,17 @@ class AuditLogEventRepository {
         if (!dirtyProperties) return
 
         withStatelessSession { StatelessSession session ->
-            if (type in [AuditLogType.FULL, AuditLogType.MEDIUM])  {
+            if (type == AuditLogType.FULL)  {
                 Map newMap = domain.toDirtyPropertiesMap()
                 Map oldMap = domain.toPersistentValueMap(dirtyProperties)
 
-                newMap.each { String key, def value ->
+                def changeMap = newMap.findAll { String key, def value ->
                     def oldValue = oldMap[key]
-                    if (oldValue != value)  {
-                        this."saveAuditLogEvent${type.toString()}"(session, EVENT_NAME_UPDATE, domain, key, value, oldValue)
-                    }
+                    return (oldValue != value)
                 }
+
+                if (changeMap)
+                    saveAuditLogEventFULL(session, EVENT_NAME_UPDATE, domain, auditLogConversionService.convert(changeMap))
             }
 
             if (type == AuditLogType.SHORT)  {
@@ -68,11 +67,9 @@ class AuditLogEventRepository {
         if (type == AuditLogType.NONE) return
 
         withStatelessSession { StatelessSession session ->
-            if (type in [AuditLogType.FULL, AuditLogType.MEDIUM])  {
+            if (type == AuditLogType.FULL)  {
                 def map = domain.toMap()
-                map.each { key, value ->
-                    this."saveAuditLogEvent${type.toString()}"(session, EVENT_NAME_DELETE, domain, key, value)
-                }
+                saveAuditLogEventFULL(session, EVENT_NAME_DELETE, domain, auditLogConversionService.convert(map))
             }
 
             if (type == AuditLogType.SHORT)  {
@@ -90,32 +87,14 @@ class AuditLogEventRepository {
         }
     }
 
-    protected void saveAuditLogEventFULL(StatelessSession session, String eventName, AuditableDomainObject domain, String key, value, oldValue = null) {
+    protected void saveAuditLogEventFULL(StatelessSession session, String eventName, AuditableDomainObject domain, String value) {
         def audit = auditLogEventPreparation.prepare new AuditLogEvent(
                 actor: auditLogListener.getActor(),
                 uri: auditLogListener.getUri(),
                 className: domain.className,
                 eventName: eventName,
                 persistedObjectId: domain.id?.toString() ?: "NA",
-                propertyName: key,
-                oldValue: auditLogConversionService.convert(oldValue),
-                newValue: auditLogConversionService.convert(value))
-
-        if (!audit.validate()) throw new RuntimeException("Audit log event validation failed: ${audit.errors}")
-
-        session.insert(audit)
-    }
-
-    protected void saveAuditLogEventMEDIUM(StatelessSession session, String eventName, AuditableDomainObject domain, String key, value, oldValue = null) {
-        def audit = auditLogEventPreparation.prepare new AuditLogEvent(
-                actor: "",
-                uri: "",
-                className: domain.className,
-                eventName: eventName,
-                persistedObjectId: domain.id?.toString() ?: "NA",
-                propertyName: key,
-                oldValue: auditLogConversionService.convert(oldValue),
-                newValue: auditLogConversionService.convert(value))
+                value: value)
 
         if (!audit.validate()) throw new RuntimeException("Audit log event validation failed: ${audit.errors}")
 
@@ -129,9 +108,7 @@ class AuditLogEventRepository {
                 className: domain.className,
                 eventName: eventName,
                 persistedObjectId: domain.id?.toString() ?: "NA",
-                propertyName: null,
-                oldValue: null,
-                newValue: null)
+                value: null)
 
         if (!audit.validate()) throw new RuntimeException("Audit log event validation failed: ${audit.errors}")
 

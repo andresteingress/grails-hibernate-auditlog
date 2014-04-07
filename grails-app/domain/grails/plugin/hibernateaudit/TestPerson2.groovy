@@ -5,9 +5,9 @@ import grails.plugin.hibernateaudit.domain.AuditLogType
 class TestPerson2 {
 
     static auditable = [
-            insertAuditLogType: AuditLogType.MEDIUM,
-            updateAuditLogType: AuditLogType.MEDIUM,
-            deleteAuditLogType: AuditLogType.MEDIUM,
+            insertAuditLogType: AuditLogType.FULL,
+            updateAuditLogType: AuditLogType.FULL,
+            deleteAuditLogType: AuditLogType.FULL,
 
             include: 'name',
             exclude: 'surName']

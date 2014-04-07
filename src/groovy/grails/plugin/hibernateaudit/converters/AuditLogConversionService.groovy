@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 @Service
 public interface AuditLogConversionService {
 
-    String convert(def object)
+    String convert(Map<String, Object> object)
 
-    Object prepare(def object)
+    Object prepare(Map<String, Object> object)
 }

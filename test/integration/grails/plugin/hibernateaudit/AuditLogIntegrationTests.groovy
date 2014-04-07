@@ -34,12 +34,28 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
         assert auditLog.persistedObjectId == p.id as String
         assert auditLog.className == Tester.class.simpleName
-        assert auditLog.propertyName == 'name'
+        assert auditLog.value == '{"name":"Andre"}'
 
         assert auditLog.dateCreated != null
 
         assert auditLog.actor == "system"
 
+    }
+
+    @Test
+    void insertEventWithoutDefaultInclude() {
+        auditLogListener.defaultIncludeList = []
+
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
+
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassName(p.id as String, Tester.class.simpleName)
+        assert auditLog
+
+        assert auditLog.eventName == 'INSERT'
+
+        assert auditLog.persistedObjectId == p.id as String
+        assert auditLog.className == Tester.class.simpleName
+        assert auditLog.value == '{"name":"Andre","surName":"Steingress"}'
     }
 
     @Test
@@ -69,13 +85,30 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
         assert auditLog.persistedObjectId == p.id as String
         assert auditLog.className == Tester.class.simpleName
-        assert auditLog.propertyName == 'name'
-        assert auditLog.newValue == '"Maxi"'
-        assert auditLog.oldValue == '"Andre"'
+        assert auditLog.value == '{"name":"Maxi"}'
 
         assert auditLog.dateCreated != null
 
         assert auditLog.actor == "system"
+    }
+
+    @Test
+    void updateEventWithoutDefaultIncludeList() {
+        auditLogListener.defaultIncludeList = []
+
+        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
+
+        p.name = 'Maxi'
+        p.surName = 'Mustermann'
+        p.save(flush: true)
+
+        assert ['INSERT', 'UPDATE'] == AuditLogEvent.list(order: 'asc', sort: 'id')*.eventName
+
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassNameAndEventName(p.id as String, Tester.class.simpleName, "UPDATE")
+        assert auditLog
+
+        assert auditLog.eventName == 'UPDATE'
+        assert auditLog.value == '{"name":"Maxi","surName":"Mustermann"}'
     }
 
     @Test
@@ -93,7 +126,7 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
         assert auditLog.persistedObjectId == p.id as String
         assert auditLog.className == TestPerson.class.simpleName
-        assert auditLog.propertyName == 'name'
+        assert auditLog.value == '{"name":"Andre"}'
 
         assert auditLog.dateCreated != null
 
@@ -113,7 +146,7 @@ class AuditLogIntegrationTests extends GroovyTestCase {
         assert auditLog.className == TestPerson3.class.simpleName
         assert auditLog.dateCreated != null
 
-        assert auditLog.propertyName == null
+        assert auditLog.value == null
         assert auditLog.actor == null
     }
 
@@ -137,9 +170,7 @@ class AuditLogIntegrationTests extends GroovyTestCase {
         assert auditLog.dateCreated != null
 
         assert auditLog.actor == null
-        assert auditLog.propertyName == null
-        assert auditLog.newValue == null
-        assert auditLog.oldValue == null
+        assert auditLog.value == null
     }
 
     @Test
@@ -155,9 +186,9 @@ class AuditLogIntegrationTests extends GroovyTestCase {
 
         assert ['INSERT', 'INSERT', 'UPDATE'] == AuditLogEvent.list(order: 'asc', sort: 'id')*.eventName
 
-        def auditLog = AuditLogEvent.findByPersistedObjectIdAndPropertyName(parent.id as String, "testPerson5")
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassNameAndEventName(parent.id as String, 'TestPerson4', 'UPDATE')
         assert auditLog
-        assert auditLog.newValue == child.id as String
+        assert auditLog.value == '{"testPerson5":' + child.id + '}'
     }
 
     @Test
@@ -174,12 +205,9 @@ class AuditLogIntegrationTests extends GroovyTestCase {
         parent.testPerson5 = null
         parent.save(flush: true)
 
-        def logs = AuditLogEvent.findAllByPersistedObjectIdAndPropertyName(parent.id as String, 'testPerson5')
+        def logs = AuditLogEvent.findAllByPersistedObjectIdAndClassNameAndEventName(parent.id as String, 'TestPerson4', 'UPDATE')
         assert logs
         assert logs.size() == 2
-
-        assert logs[0].newValue == child.id as String
-        assert logs[1].newValue == null
     }
 
     @Test
@@ -195,34 +223,8 @@ class AuditLogIntegrationTests extends GroovyTestCase {
         parent.addToTestPerson5(child2)
         parent.save(flush: true)
 
-        def auditLog = AuditLogEvent.findByPersistedObjectIdAndPropertyName(parent.id as String, "testPerson5")
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassNameAndEventName(parent.id as String, 'TestPerson6', 'UPDATE')
         assert auditLog
-        assert auditLog.newValue == "[${child1.id},${child2.id}]"
-    }
-
-    @Ignore
-    @Test
-    void addElementsToManyToOneRelationship() {
-        auditLogListener.defaultIncludeList = []
-        auditLogListener.defaultInsertAuditLogType = AuditLogType.SHORT
-
-        def parent = new TestPerson6().save(flush: true)
-        def child1  = new TestPerson5(name: "Max", surName: "Mustermann").save(flush: true)
-
-        parent.addToTestPerson5(child1)
-
-        parent.save(flush: true)
-
-        def auditLog = AuditLogEvent.findAllByPersistedObjectIdAndPropertyName(parent.id as String, "testPerson5").first()
-        assert auditLog
-        assert auditLog.newValue == "[${child1.id}]"
-
-        def child2  = new TestPerson5(name: "Erika", surName: "Mustermann").save(flush: true)
-        parent.addToTestPerson5(child2)
-        parent.save(flush: true)
-
-        auditLog = AuditLogEvent.findAllByPersistedObjectIdAndPropertyName(parent.id as String, "testPerson5")[1]
-        assert auditLog
-        assert auditLog.newValue == "[${child1.id}, ${child2.id}]"
+        assert auditLog.value == "{\"testPerson5\":[${child1.id},${child2.id}]}"
     }
 }

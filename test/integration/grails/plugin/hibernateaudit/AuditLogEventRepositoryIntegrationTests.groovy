@@ -34,29 +34,8 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         assert auditLogEvent.className == 'Tester'
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_INSERT
-        assert auditLogEvent.newValue == '"Andre"'
-        assert auditLogEvent.oldValue == null
+        assert auditLogEvent.value == '{"name":"Andre"}'
         assert auditLogEvent.persistedObjectId == p.id as String
-        assert auditLogEvent.propertyName == 'name'
-    }
-
-    @Test
-    void testInsertEventMedium() {
-        auditLogListener.defaultInsertAuditLogType = AuditLogType.MEDIUM
-
-        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
-
-        def auditLogEvent = AuditLogEvent.findByClassName('Tester')
-        assert auditLogEvent != null
-
-        assert auditLogEvent.actor == null
-        assert auditLogEvent.className == 'Tester'
-        assert auditLogEvent.dateCreated != null
-        assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_INSERT
-        assert auditLogEvent.newValue == '"Andre"'
-        assert auditLogEvent.oldValue == null
-        assert auditLogEvent.persistedObjectId == p.id as String
-        assert auditLogEvent.propertyName == 'name'
     }
 
     @Test
@@ -73,9 +52,7 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         assert auditLogEvent.className == 'Tester'
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_INSERT
-        assert auditLogEvent.newValue == null
-        assert auditLogEvent.oldValue == null
-        assert auditLogEvent.propertyName == null
+        assert auditLogEvent.value == null
     }
 
     @Test
@@ -91,31 +68,8 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         assert auditLogEvent.className == 'Tester'
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_UPDATE
-        assert auditLogEvent.newValue == '"Max"'
-        assert auditLogEvent.oldValue == '"Andre"'
+        assert auditLogEvent.value == '{"name":"Max"}'
         assert auditLogEvent.persistedObjectId == p.id as String
-        assert auditLogEvent.propertyName == 'name'
-    }
-
-    @Test
-    void testUpdateEventMedium() {
-        auditLogListener.defaultUpdateAuditLogType = AuditLogType.MEDIUM
-
-        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
-        p.name = 'Max'
-        p.save(flush: true)
-
-        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Tester', AuditLogEventRepository.EVENT_NAME_UPDATE)
-        assert auditLogEvent != null
-
-        assert auditLogEvent.actor == null
-        assert auditLogEvent.className == 'Tester'
-        assert auditLogEvent.dateCreated != null
-        assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_UPDATE
-        assert auditLogEvent.newValue == '"Max"'
-        assert auditLogEvent.oldValue == '"Andre"'
-        assert auditLogEvent.persistedObjectId == p.id as String
-        assert auditLogEvent.propertyName == 'name'
     }
 
     @Test
@@ -134,9 +88,7 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         assert auditLogEvent.persistedObjectId == p.id as String
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_UPDATE
-        assert auditLogEvent.newValue == null
-        assert auditLogEvent.oldValue == null
-        assert auditLogEvent.propertyName == null
+        assert auditLogEvent.value == null
     }
 
     @Test
@@ -157,34 +109,8 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         assert auditLogEvent.className == 'Tester'
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_DELETE
-        assert auditLogEvent.newValue == '"Max"'
-        assert auditLogEvent.oldValue == null
+        assert auditLogEvent.value == '{"name":"Max"}'
         assert auditLogEvent.persistedObjectId == p.id as String
-        assert auditLogEvent.propertyName == 'name'
-    }
-
-    @Test
-    void testDeleteEventMedium() {
-        auditLogListener.defaultInsertAuditLogType = AuditLogType.NONE
-        auditLogListener.defaultUpdateAuditLogType = AuditLogType.NONE
-        auditLogListener.defaultDeleteAuditLogType = AuditLogType.MEDIUM
-
-        def p = new Tester(name: "Andre", surName: "Steingress").save(flush: true)
-        p.name = 'Max'
-        p.save(flush: true)
-        p.delete(flush: true)
-
-        def auditLogEvent = AuditLogEvent.findByClassNameAndEventName('Tester', AuditLogEventRepository.EVENT_NAME_DELETE)
-        assert auditLogEvent != null
-
-        assert auditLogEvent.actor == null
-        assert auditLogEvent.className == 'Tester'
-        assert auditLogEvent.dateCreated != null
-        assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_DELETE
-        assert auditLogEvent.newValue == '"Max"'
-        assert auditLogEvent.oldValue == null
-        assert auditLogEvent.persistedObjectId == p.id as String
-        assert auditLogEvent.propertyName == 'name'
     }
 
     @Test
@@ -206,8 +132,6 @@ class AuditLogEventRepositoryIntegrationTests extends GroovyTestCase {
         assert auditLogEvent.persistedObjectId == p.id as String
         assert auditLogEvent.dateCreated != null
         assert auditLogEvent.eventName == AuditLogEventRepository.EVENT_NAME_DELETE
-        assert auditLogEvent.newValue == null
-        assert auditLogEvent.oldValue == null
-        assert auditLogEvent.propertyName == null
+        assert auditLogEvent.value == null
     }
 }

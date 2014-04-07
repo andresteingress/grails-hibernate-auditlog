@@ -16,13 +16,13 @@ class AuditLogJsonConversionServiceTests {
     @Test
     void dateToJsonString() {
         def date = new Date()
-        assert JsonOutput.toJson(date) == auditLogJsonConversionService.convert(date)
+        assert JsonOutput.toJson([date: date]) == auditLogJsonConversionService.convert([date: date])
     }
 
     @Test
     void stringJsonString() {
         def s = "Max"
-        assert '"Max"' == auditLogJsonConversionService.convert(s)
+        assert '{"s":"Max"}' == auditLogJsonConversionService.convert([s: s])
     }
 
     enum TestEnum { ONE, TWO, THREE }
@@ -30,6 +30,6 @@ class AuditLogJsonConversionServiceTests {
     @Test
     void enumerationValueToString() {
         def test = TestEnum.TWO
-        assert '"TWO"' == auditLogJsonConversionService.convert(test)
+        assert '{"test":"TWO"}' == auditLogJsonConversionService.convert([test: test])
     }
 }

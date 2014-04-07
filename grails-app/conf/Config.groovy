@@ -5,7 +5,7 @@ auditLog.disabled = false        // globally disable audit logging
 
 // Configure insert, update, delete logging
 auditLog.defaultInsertAuditLogType = AuditLogType.SHORT
-auditLog.defaultUpdateAuditLogType = AuditLogType.MEDIUM
+auditLog.defaultUpdateAuditLogType = AuditLogType.FULL
 auditLog.defaultDeleteAuditLogType = AuditLogType.NONE
 
 auditLog.sessionAttribute = ""   // the session attribute under which the actor name is found
