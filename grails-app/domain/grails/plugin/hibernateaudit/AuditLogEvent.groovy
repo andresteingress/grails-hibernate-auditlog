@@ -7,8 +7,6 @@ import grails.util.Holders
  */
 class AuditLogEvent implements Serializable {
 
-    static MAX_SIZE = 65534
-
     Date dateCreated
 
     // principal and URI
@@ -30,7 +28,7 @@ class AuditLogEvent implements Serializable {
         persistedObjectId(nullable: true)
         eventName(nullable: true)
 
-        value(nullable: true, maxSize: MAX_SIZE)
+        value(nullable: true)
     }
 
     static mapping = {
