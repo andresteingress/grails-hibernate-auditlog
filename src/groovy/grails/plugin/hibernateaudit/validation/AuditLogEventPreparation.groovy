@@ -12,7 +12,6 @@ class AuditLogEventPreparation {
 
     AuditLogEvent prepare(AuditLogEvent auditLogEvent)  {
         auditLogEvent.dateCreated = new Date()
-        auditLogEvent.value = auditLogEvent.value
         auditLogEvent
     }
 }

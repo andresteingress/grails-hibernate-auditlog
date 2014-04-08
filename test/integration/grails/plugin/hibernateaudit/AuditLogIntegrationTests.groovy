@@ -112,6 +112,34 @@ class AuditLogIntegrationTests extends GroovyTestCase {
     }
 
     @Test
+    void updateEventWithoutDefaultIncludeListAndDate() {
+        auditLogListener.defaultIncludeList = []
+
+        def p = new Tester2(name: "Andre", surName: "Steingress", birthDate: Date.parse('dd.MM.yyyy', '01.01.1900')).save(flush: true)
+        p.save(flush: true)
+
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassNameAndEventName(p.id as String, Tester2.class.simpleName, "INSERT")
+        assert auditLog
+
+        assert auditLog.eventName == 'INSERT'
+        assert auditLog.value == '{"birthDate":"1899-12-31T23:00:00+0000","name":"Andre","surName":"Steingress"}'
+    }
+
+    @Test
+    void updateEventWithoutDefaultIncludeListAndBigDecimal() {
+        auditLogListener.defaultIncludeList = []
+
+        def p = new Tester3(name: "Andre", surName: "Steingress", money: 42.42).save(flush: true)
+        p.save(flush: true)
+
+        def auditLog = AuditLogEvent.findByPersistedObjectIdAndClassNameAndEventName(p.id as String, Tester3.class.simpleName, "INSERT")
+        assert auditLog
+
+        assert auditLog.eventName == 'INSERT'
+        assert auditLog.value == '{"money":42.42,"name":"Andre","surName":"Steingress"}'
+    }
+
+    @Test
     void insertEventWithLocalLists() {
 
         auditLogListener.defaultIncludeList = []
