@@ -26,7 +26,6 @@ class HibernateAuditLogPluginSupport {
 
                 sessionAttribute = application.config.auditLog.sessionAttribute ?: ""
                 actorKey = application.config.auditLog.actorKey ?: ""
-                truncateLength = application.config.auditLog.truncateLength ?: AuditLogEvent.MAX_SIZE
                 // actorClosure = application.config.auditLog.actorClosure
                 defaultExcludeList = application.config.auditLog.defaultExclude?.asImmutable() ?: ['version', 'lastUpdated'].asImmutable()
 

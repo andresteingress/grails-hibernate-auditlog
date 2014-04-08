@@ -12,13 +12,7 @@ class AuditLogEventPreparation {
 
     AuditLogEvent prepare(AuditLogEvent auditLogEvent)  {
         auditLogEvent.dateCreated = new Date()
-        auditLogEvent.value = truncate(auditLogEvent.value)
+        auditLogEvent.value = auditLogEvent.value
         auditLogEvent
-    }
-
-    protected String truncate(String value)  {
-        if (!value) return value
-        def maxLength = Math.min(value.length(), auditLogListener.truncateLength ?: Integer.MAX_VALUE)
-        return value.substring(0, maxLength)
     }
 }

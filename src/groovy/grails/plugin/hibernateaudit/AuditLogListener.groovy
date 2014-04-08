@@ -19,8 +19,6 @@ class AuditLogListener extends AbstractPersistenceEventListener {
 
     GrailsApplication grailsApplication
 
-    Integer truncateLength = AuditLogEvent.MAX_SIZE
-
     String sessionAttribute = ""
     String actorKey = ""
     Closure actorClosure = null
